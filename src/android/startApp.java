@@ -52,7 +52,6 @@ public class startApp extends CordovaPlugin {
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("startapp")) {
-            this.beep(1);
             this.startApp(args.getString(0));
         }
         else {
@@ -70,30 +69,8 @@ public class startApp extends CordovaPlugin {
 
     
     /**
-     * Beep plays the default notification ringtone.
-     *
-     * @param count     Number of times to play notification
+     * startApp
      */
-    public void beep(long count) {
-        Uri ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone notification = RingtoneManager.getRingtone(this.cordova.getActivity().getBaseContext(), ringtone);
-
-        // If phone is not set to silent mode
-        if (notification != null) {
-            for (long i = 0; i < count; ++i) {
-                notification.play();
-                long timeout = 5000;
-                while (notification.isPlaying() && (timeout > 0)) {
-                    timeout = timeout - 100;
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
-        }
-    }
-    
     public void startApp(String component) {
     	Intent LaunchIntent = this.cordova.getActivity().getPackageManager().getLaunchIntentForPackage(component);
     	this.cordova.getActivity().startActivity(LaunchIntent);
