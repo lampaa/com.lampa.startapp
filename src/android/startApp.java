@@ -68,6 +68,15 @@ public class startApp extends CordovaPlugin {
      */
     public void startApp(String component) {
     	Intent LaunchIntent = this.cordova.getActivity().getPackageManager().getLaunchIntentForPackage(component);
+    	/**
+    	 * If you want to pass parameters:
+    	 */
+    	/**
+    	ComponentName comp = new ComponentName("com.component.name", "com.component.name.MainActivity");
+    	LaunchIntent.setComponent(comp);
+    	LaunchIntent.putExtra("product_id", 102);
+    	*/
+    	
     	this.cordova.getActivity().startActivity(LaunchIntent);
     }
 }
