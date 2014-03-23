@@ -36,10 +36,10 @@ function(error) { /* error */
 
 ```js
 navigator.startApp.start([
-	'com.teaway.teamenu', // applucation
-	'com.teaway.teamenu.MainActivity', // activity
-	'product_id', // key
-	'102' // value
+	"com.example.hello", // applucation
+	"com.example.hello.MainActivity", // activity
+	"product_id", // key
+	"100" // value
 ], function(message) { /* success */
 	console.log(message); // => OK
 }, 
