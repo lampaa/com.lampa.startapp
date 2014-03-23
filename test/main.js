@@ -21,5 +21,38 @@
 
 
 function init() {
-	navigator.startApp('com.example.hello');
+	/**
+	 * check the application is installed
+	 */
+	navigator.startApp.check('com.teaway.teamenu', function(message) { /* success */
+		console.log(message); // => OK
+	}, 
+	function(error) { /* error */
+		console.log('47', error);
+	});
+	
+	/**
+	 * start application without parameters
+	 */
+	navigator.startApp.start('com.teaway.teamenu', function(message) { /* success */
+		console.log(message); // => OK
+	}, 
+	function(error) { /* error */
+		console.log('47', error);
+	});
+	
+	/**
+	 * start application with parameters
+	 */
+	navigator.startApp.start([
+		'com.teaway.teamenu', // applucation
+		'com.teaway.teamenu.MainActivity', // activity
+		'product_id', // key
+		'102' // value
+	], function(message) { /* success */
+		console.log(message); // => OK
+	}, 
+	function(error) { /* error */
+		console.log('47', error);
+	});
 }
