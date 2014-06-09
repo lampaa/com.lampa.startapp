@@ -1,4 +1,4 @@
-/*
+cordova.define("org.apache.cordova.startapp.startapp", function(require, exports, module) { /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -35,3 +35,4 @@ module.exports = {
 		exec(completeCallback, errorCallback, "startApp", "start", (typeof message === 'string') ? [message] : message);
 	}	
 }
+});
