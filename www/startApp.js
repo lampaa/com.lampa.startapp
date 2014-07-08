@@ -20,7 +20,6 @@
 */
 
 var exec = require('cordova/exec');
-var platform = require('cordova/platform');
 
 /** Open a native alert dialog, with a customizable title and button text.
  *
