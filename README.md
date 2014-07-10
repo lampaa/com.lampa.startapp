@@ -47,3 +47,16 @@ function(error) { /* error */
 	console.log('47', error);
 });
 ```
+
+
+
+**Start application in iOS**
+
+```js
+navigator.startApp.start("twitter://", function(message) { /* success */
+	console.log(message); // => OK
+}, 
+function(error) { /* error */
+	console.log('47', error);
+});
+```
