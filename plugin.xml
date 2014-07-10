@@ -24,4 +24,18 @@
         <source-file src="src/android/startApp.java" target-dir="src/org/apache/cordova/startapp" />
     </platform>
 
+
+<platform name="ios">
+
+    <config-file target="config.xml" parent="/*">
+      <feature name="startApp">
+        <param name="ios-package" value="startApp"/>
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/startApp.h"/>
+    <source-file src="src/ios/startApp.m"/>
+  </platform>
+
+
 </plugin>
