@@ -17,10 +17,10 @@ cordova.define("org.apache.cordova.startapp.startapp", function(require, exports
  * specific language governing permissions and limitations
  * under the License.
  *
+ * to phonegap 3.0.*
 */
 
 var exec = require('cordova/exec');
-var platform = require('cordova/platform');
 
 /** Open a native alert dialog, with a customizable title and button text.
  *
