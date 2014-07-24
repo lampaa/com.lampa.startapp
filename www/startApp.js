@@ -17,6 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
+ * to phonegap 3.5.*
 */
 
 var exec = require('cordova/exec');
