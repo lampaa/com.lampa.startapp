@@ -1,4 +1,4 @@
-cordova-plugin-startapp # Updated of 18.12.2014
+cordova-plugin-startapp # Upd 18.12.2014
 ===========================================================================
 
 
