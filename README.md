@@ -44,6 +44,9 @@ function(error) { /* error */
 	console.log(error);
 });
 ```
+> **Important!** First value of first parameter of _start_ method can be either a string or an array. And the array must contain two parameters.
+
+
 _Start application with only values_
 
 ```js
