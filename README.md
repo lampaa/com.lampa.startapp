@@ -44,7 +44,9 @@ function(error) { /* error */
 	console.log(error);
 });
 ```
-> **Important!** First value of first parameter of _start_ method can be either a string or an array. And the array must contain two parameters.
+> **Important!** First value of first parameter of _start_ method can be either a string or an array. And the array must contain two parameters. Example:
+> 
+> ["com.app.name", [....]] or [["com.app.name", "com.app.name.Activity"] [....]]
 
 
 _Start application with only values_
