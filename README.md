@@ -3,14 +3,19 @@ cordova-plugin-startapp # Upd 18.12.2014
 
 
 
-Phonegap 3.*.* plugin for check or launch other application in android device.
+Phonegap 3.x.x plugin for check or launch other application in android device.
 
 
 Install: ```cordova plugin add https://github.com/lampaa/org.apache.cordova.startapp.git```
 
 Delete:  ```cordova plugin rm org.apache.cordova.startapp```
 
+Manually installation for Android:
+```on progress...```
+
 use:  **ANDROID**
+
+
 
 _Check application for installed_
 
@@ -126,3 +131,11 @@ function(error) { /* error */
 	console.log(error);
 });
 ```
+===========================================
+Tags: 
+
+Cordova start external application.
+Android open an external application.
+Phonegap start external application.
+Launching External Intents Works on Cordova.
+Android launch external activities.
