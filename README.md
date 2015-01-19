@@ -98,6 +98,10 @@ Example, call browser:
 ```js
 navigator.startApp.start([["action", "VIEW"], ["https://github.com/lampaa"], ...);
 ```
+Example, call facebook:
+```js
+navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https://www.facebook.com/GitHub"], ...);
+```
 
 Use **iOS**
 _Start application_
