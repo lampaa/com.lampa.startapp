@@ -104,13 +104,25 @@ navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https:/
 ```
 
 Use **iOS**
-_Start application_
+
+_Check iOS application for installed_
+
+```js
+navigator.startApp.check("twitter://", function(message) { /* success */
+	console.log(message); // => OK
+}, 
+function(error) { /* error */
+	console.log(error);
+});
+```
+
+_Start iOS application_
 
 ```js
 navigator.startApp.start("twitter://", function(message) { /* success */
 	console.log(message); // => OK
 }, 
 function(error) { /* error */
-	console.log('47', error);
+	console.log(error);
 });
 ```
