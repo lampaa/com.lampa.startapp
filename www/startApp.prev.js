@@ -1,36 +1,35 @@
-cordova.define("org.apache.cordova.startapp.startapp", function(require, exports, module) { /*
- *
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- *
- * to phonegap 3.0.*
-*/
+cordova.define("com.lampa.startapp.startApp", function(require, exports, module) {
+/**
+	com.lampa.startapp
+	https://github.com/lampaa/com.lampa.startapp
+	
+	Phonegap 3 plugin for check or launch other application in android device (iOS support).
+	bug tracker: https://github.com/lampaa/org.apache.cordova.startapp/issues
+	
+	!! THIS SCRIPT FILE TO CORDOVA 3.0.*
+	If you are using a version upper than 3.5, read this theme: https://github.com/lampaa/org.apache.cordova.startapp/issues/5#issuecomment-49974214
+ */
 
 var exec = require('cordova/exec');
 
-/** Open a native alert dialog, with a customizable title and button text.
- *
- * @param {String} message              app name
- * @param {Function} completeCallback   The callback that is called when open app
- */
 module.exports = {
+	/** 
+	 * Check application for installed on device
+	 *
+	 * @param {String} message              app name
+	 * @param {Function} completeCallback   The callback that is called when open app
+	 * @param {Function} errorCallback		The callback that is called when application is not installed
+	 */
 	check: function(message, completeCallback, errorCallback) {
 		exec(completeCallback, errorCallback, "startApp", "check", [message]);
 	},
+	/** 
+	 * Start application on device
+	 *
+	 * @param {Mixed} message				params, view documentation https://github.com/lampaa/com.lampa.startapp
+	 * @param {Function} completeCallback   The callback that is called when open app
+	 * @param {Function} errorCallback		The callback that is called when an error occurred when the program starts.
+	 */
 	start: function(message, completeCallback, errorCallback) {
 		exec(completeCallback, errorCallback, "startApp", "start", (typeof message === 'string') ? [message] : message);
 	}	

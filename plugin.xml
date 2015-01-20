@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-           id="org.apache.cordova.startapp"
-      version="0.3.0">
+	id="com.lampa.startapp"
+	version="0.0.4">
 
     <name>startApp</name>
-    <description>Cordova startApp Plugin</description>
-    <license>Apache 2.0</license>
-    <keywords>cordova,startapp</keywords>
+    <description>Phonegap 3 plugin for check or launch other application in android device.</description>
+    <license>MIT</license>
+    <keywords>cordova,startapp,lampa</keywords>
 
     <js-module src="www/startApp.js" name="startapp">
         <merges target="navigator.startApp" />
@@ -17,25 +17,24 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="startApp">
-                <param name="android-package" value="org.apache.cordova.startapp.startApp"/>
+                <param name="android-package" value="com.lampa.startapp.startApp"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/startApp.java" target-dir="src/org/apache/cordova/startapp" />
+        <source-file src="src/android/startApp.java" target-dir="src/com/lampa/startapp" />
     </platform>
 
 
-<platform name="ios">
-
-    <config-file target="config.xml" parent="/*">
-      <feature name="startApp">
-        <param name="ios-package" value="startApp"/>
-      </feature>
-    </config-file>
-
-    <header-file src="src/ios/startApp.h"/>
-    <source-file src="src/ios/startApp.m"/>
-  </platform>
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="startApp">
+				<param name="ios-package" value="startApp"/>
+			</feature>
+		</config-file>
+		
+		<header-file src="src/ios/startApp.h"/>
+		<source-file src="src/ios/startApp.m"/>
+	</platform>
 
 
 </plugin>
