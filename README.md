@@ -71,7 +71,7 @@ function(error) { /* error */
 _ANDROID: Start application with key:value parameters_
 
 ```js
-navigator.startApp.start([[...], [{"key1":"value1"},{"key2":"value2"}, {...}, {"keyN":"valueN"}], function(message) { /* success */
+navigator.startApp.start([[...], [{"key1":"value1"},{"key2":"value2"}, {...}, {"keyN":"valueN"}]], function(message) { /* success */
 	console.log(message); // => OK
 }, 
 function(error) { /* error */
@@ -81,12 +81,12 @@ function(error) { /* error */
 Example, call application with activity and key:value param:
 
 ```js
-navigator.startApp.start([["app.com.name", "app.com.name.Activity"], [{"product_id":"100"}], ...);
+navigator.startApp.start([["app.com.name", "app.com.name.Activity"], [{"product_id":"100"}]], ...);
 ```
 _ANDROID: Start application with action parameters_
 
 ```js
-navigator.startApp.start([["action", "ACTION_NAME"], ["tel:+79109999999"], function(message) { /* success */
+navigator.startApp.start([["action", "ACTION_NAME"], ["tel:+79109999999"]], function(message) { /* success */
 	console.log(message); // => OK
 }, 
 function(error) { /* error */
@@ -97,19 +97,19 @@ ACTION_NAME these is a Intent flag [Intent Flags](http://developer.android.com/r
 
 Example, call skype:
 ```js
-navigator.startApp.start([["action", "VIEW"], ["skype:+79109999999"], ...);
+navigator.startApp.start([["action", "VIEW"], ["skype:+79109999999"]], ...);
 ```
 Example, call phone:
 ```js
-navigator.startApp.start([["action", "CALL"], ["tel:+79109999999"], ...);
+navigator.startApp.start([["action", "CALL"], ["tel:+79109999999"]], ...);
 ```
 Example, call browser:
 ```js
-navigator.startApp.start([["action", "VIEW"], ["https://github.com/lampaa"], ...);
+navigator.startApp.start([["action", "VIEW"], ["https://github.com/lampaa"]], ...);
 ```
 Example, call facebook:
 ```js
-navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https://www.facebook.com/GitHub"], ...);
+navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https://www.facebook.com/GitHub"]], ...);
 ```
 
 Use **iOS**
