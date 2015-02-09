@@ -76,7 +76,12 @@ public class startApp extends CordovaPlugin {
 			if(activity != null) {
 				if(com_name.equals("action")) {
 					// sample: android.intent.action.VIEW
-					LaunchIntent = new Intent("android.intent.action." + activity);
+					if(activity.indexOf(".") > 0) {
+						LaunchIntent = new Intent(activity);
+					}
+					else {
+						LaunchIntent = new Intent("android.intent.action." + activity);
+					}
 				}
 				else {
 					LaunchIntent = new Intent();
