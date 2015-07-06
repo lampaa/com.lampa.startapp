@@ -3,7 +3,7 @@
 	https://github.com/lampaa/com.lampa.startapp
 	
 	Phonegap 3 plugin for check or launch other application in android device (iOS support).
-	bug tracker: https://github.com/lampaa/org.apache.cordova.startapp/issues
+	bug tracker: https://github.com/lampaa/com.lampa.startapp/issues
 */
 package com.lampa.startapp;
 
