@@ -112,6 +112,18 @@ Example, call facebook:
 navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https://www.facebook.com/GitHub"]], ...);
 ```
 
+_Start whatsapp straight to the chat window_
+
+```js
+navigator.startApp.openWhatsappChat("phoneNumber", function(message) { /* success */
+        console.log(message); // => OK
+},
+function(error) { /* error */
+        console.log(error);
+});
+```
+> **Important!** Before calling this method, you should check if whatsapp is installed and ALSO if the `phoneNumber` is added to user's contact list. If you try to open a chat window using an unknown number (someone who is not in the phone's contact list), whatsapp will inform you to invite the person by SMS before starting a chat. 
+
 Use **iOS**
 
 _Check iOS application for installed_

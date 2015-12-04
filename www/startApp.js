@@ -30,5 +30,15 @@ module.exports = {
 	 */
 	start: function(message, completeCallback, errorCallback) {
 		exec(completeCallback, errorCallback, "startApp", "start", (typeof message === 'string') ? [message] : message);
-	}	
+	},
+	/** 
+         * Start whatsapp chat window
+         *
+         * @param {String} phoneNumber          phone number
+         * @param {Function} completeCallback   The callback that is called when open app
+         * @param {Function} errorCallback      The callback that is called when an error occurred when the program starts.
+         */
+        openWhatsappChat: function(phoneNumber, completeCallback, errorCallback) {
+        	exec(completeCallback, errorCallback, "startApp", "openWhatsappChat", [phoneNumber])
+        }	
 }

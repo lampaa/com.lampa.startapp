@@ -41,12 +41,13 @@ public class startApp extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("start")) {
             this.start(args, callbackContext);
-        }
-		else if(action.equals("check")) {
-			this.check(args.getString(0), callbackContext);
-		}
+        } else if(action.equals("check")) {
+	    this.check(args.getString(0), callbackContext);
+	} else if(action.equals("openWhatsappChat")) {
+	    this.openWhatsappChat(args.getString(0), callbackContext);
+	}
 		
-		return true;
+	return true;
     }
 
     //--------------------------------------------------------------------------
@@ -144,4 +145,19 @@ public class startApp extends CordovaPlugin {
 			callback.error(e.toString());
 		}
 	}
+
+	public void openWhatsappChat(String phoneNumber, CallbackContext callback) {
+		try {
+			Uri mUri = Uri.parse("smsto:" + phoneNumber);
+			Intent mIntent = new Intent(Intent.ACTION_SENDTO, mUri);
+			mIntent.setPackage("com.whatsapp");
+			mIntent.putExtra("chat", true);
+			this.cordova.getActivity().startActivity(mIntent);
+
+			callback.success();
+		} catch (Exception e) {
+			callback.error(e.toString());
+		}
+	}
+
 }
