@@ -124,6 +124,12 @@ function(error) { /* error */
 ```
 > **Important!** Before calling this method, you should check if whatsapp is installed and ALSO if the `phoneNumber` is added to user's contact list. If you try to open a chat window using an unknown number (someone who is not in the phone's contact list), whatsapp will inform you to invite the person by SMS before starting a chat. 
 
+Example:
+```js
+navigator.startApp.openWhatsappChat("+79109999999");
+```
+
+
 Use **iOS**
 
 _Check iOS application for installed_
