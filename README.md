@@ -22,6 +22,7 @@ use:  **ANDROID**
 
 
 _Check application for installed_
+
 If success, returned application info: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
 ```js
 navigator.startApp.check("com.application.name", function(message) { /* success */
