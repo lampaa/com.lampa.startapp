@@ -57,14 +57,21 @@ public class startApp extends CordovaPlugin {
      */
     public void start(JSONArray args, CallbackContext callback) {
 		
-		String com_name = null;
-		String activity = null;
 		Intent LaunchIntent;
+		
+		String com_name = null;
+		
+		String activity = null;
+		String spackage = null;
+		String intenuri = null;
 		
 		try {
 			if (args.get(0) instanceof JSONArray) {
 				com_name = args.getJSONArray(0).getString(0);
-				activity = args.getJSONArray(0).getString(1);                     
+				activity = args.getJSONArray(0).getString(1);
+				spackage = args.getJSONArray(0).getString(2);
+				intetype = args.getJSONArray(0).getString(3);
+				intenuri = args.getJSONArray(0).getString(4);
 			}
 			else {
 				com_name = args.getString(0);
@@ -75,12 +82,20 @@ public class startApp extends CordovaPlugin {
 			 */
 			if(activity != null) {
 				if(com_name.equals("action")) {
-					// sample: android.intent.action.VIEW
-					if(activity.indexOf(".") > 0) {
-						LaunchIntent = new Intent(activity);
+					/**
+					 * . < 0: VIEW
+					 * . >= 0: android.intent.action.VIEW
+					 */
+					if(activity.indexOf(".") < 0) {
+						activity = "android.intent.action." + activity;
+					}
+					
+					// if uri exists
+					if(intenuri != null) {
+						LaunchIntent = new Intent(activity, Uri.parse(intenuri));
 					}
 					else {
-						LaunchIntent = new Intent("android.intent.action." + activity);
+						LaunchIntent = new Intent(activity);
 					}
 				}
 				else {
@@ -90,6 +105,20 @@ public class startApp extends CordovaPlugin {
 			}
 			else {
 				LaunchIntent = this.cordova.getActivity().getPackageManager().getLaunchIntentForPackage(com_name);
+			}
+			
+			/**
+			 * setPackage, http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)
+			 */
+			if(spackage != null) {
+				LaunchIntent.setPackage(spackage);
+			}
+			
+			/**
+			 * setType, http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)
+			 */
+			if(intetype != null) {
+				LaunchIntent.setType(intetype);
 			}
 			
 			/**
@@ -122,6 +151,9 @@ public class startApp extends CordovaPlugin {
 				}
 			}
 			
+			/**
+			 * start activity
+			 */
 			this.cordova.getActivity().startActivity(LaunchIntent);
 			callback.success();
 			
@@ -138,8 +170,22 @@ public class startApp extends CordovaPlugin {
 	public void check(String component, CallbackContext callback) {
 		PackageManager pm = this.cordova.getActivity().getApplicationContext().getPackageManager();
 		try {
-			pm.getPackageInfo(component, PackageManager.GET_ACTIVITIES);
-			callback.success();
+			/**
+			 * get package info
+			 */
+			PackageInfo PackInfo = pm.getPackageInfo(component, PackageManager.GET_ACTIVITIES);
+			
+			/**
+			 * create json object
+			 */
+			JSONObject info = new JSONObject();
+			
+			info.put("versionName", info.versionName);
+			info.put("packageName", info.packageName);
+			info.put("versionCode", info.versionCode);
+			info.put("applicationInfo", info.applicationInfo);
+			
+			callback.success(info);
 		} catch (Exception e) {
 			callback.error(e.toString());
 		}

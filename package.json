@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-startapp",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Phonegap 3 plugin for check or launch other application in android device.",
   "cordova": {
     "id": "com.lampa.startapp",
@@ -21,7 +21,7 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "author": "",
+  "author": "lampaa",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lampaa/com.lampa.startapp/issues"
