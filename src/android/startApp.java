@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageInfo;
 import java.util.Iterator;
 import android.net.Uri;
 
@@ -63,15 +64,25 @@ public class startApp extends CordovaPlugin {
 		
 		String activity = null;
 		String spackage = null;
+		String intetype = null;
 		String intenuri = null;
 		
 		try {
 			if (args.get(0) instanceof JSONArray) {
 				com_name = args.getJSONArray(0).getString(0);
 				activity = args.getJSONArray(0).getString(1);
-				spackage = args.getJSONArray(0).getString(2);
-				intetype = args.getJSONArray(0).getString(3);
-				intenuri = args.getJSONArray(0).getString(4);
+				
+				if(args.getJSONArray(0).length() > 2) {
+					spackage = args.getJSONArray(0).getString(2);
+				}
+				
+				if(args.getJSONArray(0).length() > 3) {
+					intetype = args.getJSONArray(0).getString(3);
+				}
+				
+				if(args.getJSONArray(0).length() > 4) {
+					intenuri = args.getJSONArray(0).getString(4);
+				}
 			}
 			else {
 				com_name = args.getString(0);
@@ -180,10 +191,10 @@ public class startApp extends CordovaPlugin {
 			 */
 			JSONObject info = new JSONObject();
 			
-			info.put("versionName", info.versionName);
-			info.put("packageName", info.packageName);
-			info.put("versionCode", info.versionCode);
-			info.put("applicationInfo", info.applicationInfo);
+			info.put("versionName", PackInfo.versionName);
+			info.put("packageName", PackInfo.packageName);
+			info.put("versionCode", PackInfo.versionCode);
+			info.put("applicationInfo", PackInfo.applicationInfo);
 			
 			callback.success(info);
 		} catch (Exception e) {
