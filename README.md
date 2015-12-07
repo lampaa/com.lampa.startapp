@@ -1,4 +1,4 @@
-cordova-plugin-startapp # Upd 18.12.2014
+cordova-plugin-startapp # Upd 7.11.2015
 ===========================================================================
 
 Phonegap 3.x.x plugin for check or launch other application in android device.
@@ -111,6 +111,16 @@ Example, call facebook:
 ```js
 navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https://www.facebook.com/GitHub"]], ...);
 ```
+Example, call whatsapp:
+```js
+navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain"], [{"android.intent.extra.TEXT":"Text..."}]], ...);
+```
+Example, call whatsapp chat:
+```js
+navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain", "+79123456789"], [{"android.intent.extra.TEXT":"Text..."}, {"chat", true}]], ...);
+```
+
+
 
 Use **iOS**
 
