@@ -43,8 +43,7 @@ function(error) { /* error */
 });
 ```
 
-_Start application with package name and activity_
-
+_Start application with params. First variant with package and activity:
 ```js
 navigator.startApp.start([["com.app.name", "com.app.name.Activity"]], function(message) { /* success */
 	console.log(message); // => OK
@@ -53,6 +52,24 @@ function(error) { /* error */
 	console.log(error);
 });
 ```
+_Start application with params. Second variant with action and action params:
+```js
+navigator.startApp.start([["action", "ACTION_NAME", "PACKAGE", "TYPE", "URI"]], function(message) { /* success */
+	console.log(message); // => OK
+}, 
+function(error) { /* error */
+	console.log(error);
+});
+```
+ACTION_NAME these is a Intent flag [Intent Flags](http://developer.android.com/reference/android/content/Intent.html) (MAIN, VIEW, CALL, etc..).
+
+PACKAGE these is a Intent method (optional or set null) [setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String))
+
+TYPE these is a Intent method (optional or set null) [setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String))
+
+URI these is a Intent data Uri (optional or set null) [Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri))
+
+
 > **Important!** First value of first parameter of _start_ method can be either a string or an array. And the array must contain two parameters. Example:
 > 
 > ["com.app.name", [....]] or [["com.app.name", "com.app.name.Activity"] [....]]
@@ -83,17 +100,8 @@ Example, call application with activity and key:value param:
 ```js
 navigator.startApp.start([["app.com.name", "app.com.name.Activity"], [{"product_id":"100"}]], ...);
 ```
-_ANDROID: Start application with action parameters_
 
-```js
-navigator.startApp.start([["action", "ACTION_NAME"], ["tel:+79109999999"]], function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
-});
-```
-ACTION_NAME these is a Intent flag [Intent Flags](http://developer.android.com/reference/android/content/Intent.html) (MAIN, VIEW, CALL, etc..).
+
 
 Example, call skype:
 ```js
