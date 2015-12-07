@@ -22,10 +22,10 @@ use:  **ANDROID**
 
 
 _Check application for installed_
-
+If success, returned application info: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
 ```js
 navigator.startApp.check("com.application.name", function(message) { /* success */
-	console.log(message); // => OK
+	console.log(message); // => {versionName: '...', packageName: '...', ...}
 }, 
 function(error) { /* error */
 	console.log(error);
@@ -61,13 +61,13 @@ function(error) { /* error */
 	console.log(error);
 });
 ```
-ACTION_NAME these is a Intent flag [Intent Flags](http://developer.android.com/reference/android/content/Intent.html) (MAIN, VIEW, CALL, etc..).
+`ACTION_NAME` these is a Intent flag [Intent Flags](http://developer.android.com/reference/android/content/Intent.html) (MAIN, VIEW, CALL, etc..).
 
-PACKAGE these is a Intent method [setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) (optional or set null)
+`PACKAGE` these is a Intent method [setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) (optional or set null)
 
-TYPE these is a Intent method [setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)) (optional or set null)
+`TYPE` these is a Intent method [setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)) (optional or set null)
 
-URI these is a Intent data Uri [Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) (optional or set null)
+`URI` these is a Intent data Uri [Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) (optional or set null)
 
 
 > **Important!** First value of first parameter of _start_ method can be either a string or an array. And the array must contain two parameters. Example:
