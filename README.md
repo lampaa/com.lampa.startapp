@@ -126,7 +126,7 @@ navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain"], [{"a
 ```
 Example, call whatsapp chat:
 ```js
-navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain", "+79123456789"], [{"android.intent.extra.TEXT":"Text..."}, {"chat", true}]], ...);
+navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain", "+79123456789"], [{"android.intent.extra.TEXT":"Text..."}, {"chat": true}]], ...);
 ```
 
 
