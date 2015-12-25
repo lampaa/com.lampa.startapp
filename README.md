@@ -166,3 +166,5 @@ Android open an external application.
 Phonegap start external application.
 Launching External Intents Works on Cordova.
 Android launch external activities.
+Android check app availability.
+Android launch application with parameters. 
