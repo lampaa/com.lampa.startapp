@@ -1,7 +1,7 @@
-cordova-plugin-startapp # Upd 7.11.2015
+cordova plugin startapp
 ===========================================================================
 
-Phonegap 3.x.x plugin for check or launch other application in android device.
+Phonegap plugin for check or launch other application in android device.
 
 ===========================================
 Install: ```cordova plugin add com.lampa.startapp```
@@ -15,11 +15,32 @@ Delete previos version:  ```cordova plugin rm org.apache.cordova.startapp```
 ===========================================
 
 Manually installation for Android:
-```on progress...```
+
+Add to ```/my-app/platforms/android/res/xml/config.xml```:
+```xml
+<feature name="startApp">
+	<param name="android-package" value="com.lampa.startapp.startApp" />
+</feature>
+```
+Add to ```/my-app/platforms/android/assets/www/cordova_plugins.js```:
+```javascript
+{
+	"file": "plugins/com.lampa.startapp/www/startApp.js",
+	"id": "com.lampa.startapp.startapp",
+	"merges": [
+		"navigator.startApp"
+	]
+}
+```
+Add to ```/my-app/platforms/android/assets/www/plugins/com.lampa.startapp/www/``` file:
+https://github.com/lampaa/com.lampa.startapp/blob/master/www/startApp.js
+
+Add to ```/my-app/platforms/android/src/com/lampa/startapp/``` file:
+https://github.com/lampaa/com.lampa.startapp/blob/master/src/android/startApp.java
+
+
 
 use:  **ANDROID**
-
-
 
 _Check application for installed_
 
