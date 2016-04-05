@@ -23,7 +23,7 @@ To run other application, you need to build data:
 var sApp = startApp.set({} params [, {} extras]);
 ```
 | Param | Description | Default | Values |
-| --- | --- |
+| --- | --- | --- | --- |
 | action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String |
 | category | [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) | null | String |
 | type | [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String))  | null | String |
