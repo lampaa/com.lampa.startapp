@@ -12,7 +12,7 @@ Add to ```/my-app/platforms/android/assets/www/cordova_plugins.js```:
 	"file": "plugins/com.lampa.startapp/www/startApp.js",
 	"id": "com.lampa.startapp",
 	"merges": [
-		"navigator.startApp"
+		"startApp"
 	]
 }
 ```
