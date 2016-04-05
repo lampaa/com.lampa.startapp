@@ -14,7 +14,7 @@ Phonegap plugin for check or launch other application, get extras in phonegap ap
 [Manually installation for Android.](/MANUALLY_INSTALL.md)
 
 
-**NEW!** [Script builder.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md) Create script with ui builder.
+**NEW!** [Script builder.](http://lampaa.github.io/com.lampa.startapp/index.html) Create script with UI builder.
 
 
 # ANDROID
