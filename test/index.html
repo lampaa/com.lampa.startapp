@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta charset="utf-8" />
+	<title>com.lampa.startapp test file</title>
+	
+	<style>
+	html, body {
+		margin:0;
+		padding:0;
+		font: 14px arial;
+	}
+	#left {
+		float: left;
+		width: 50%;
+		height: 100%;
+	}
+	#right {
+		border-left: 3px #ccc solid;
+		width: 50%;
+		max-width: 50%;
+		margin-left:-3px;
+		float: right;
+		height: 100%;
+	}
+	
+	label {
+		display: block;
+		padding: 20px;
+		border-bottom: 3px blue solid;
+		text-transform: uppercase;
+	}
+	
+	label input, label select {
+		border: 2px gray solid;
+		box-sizing:content-box;
+		display: block;
+		margin-top: 5px;
+		text-transform: none;
+		width: 90%;
+		padding: 2px;
+	}
+		
+	label input:focus, label select:focus {
+		border: 2px blue solid;
+	}
+	
+	.extras input {
+		width: 35%;
+		display: inline-block;
+	}
+	
+	.l_stype {
+		text-transform: none;
+	}
+	.l_stype input {
+		width: auto;
+		display: inline-block;
+	}
+	
+	#result {
+		padding: 10px;
+	}
+	
+	#template {
+		display: none;
+	}
+	</style>
+	
+	
+	<script type='text/javascript' src='cordova.js'></script>
+	<script type='text/javascript' src='jquery.js'></script>
+	<script type='text/javascript' src='test.js'></script>
+</head>
+<body>
+	<div id='left'>
+		<form>
+			<label>
+				Intent action
+				<select id='action' name='action[0]'>
+					<option></option>
+					<option>ACTION_MAIN</option>
+					<option>ACTION_VIEW</option>
+					<option>ACTION_DIAL</option>
+					<option>ACTION_CALL</option>
+					<option>ACTION_SEND</option>
+					<option>ACTION_PICK</option>
+					<option>ACTION_EDIT</option>
+					<option>ACTION_ANSWER</option>
+					<option>ACTION_DELETE</option>
+					<option>ACTION_RUN</option>
+					<option>ACTION_SYNC</option>
+					<option>ACTION_SENDTO</option>
+					<option>ACTION_CHOOSER</option>
+					<option>ACTION_SEARCH</option>
+					<option>ACTION_WEB_SEARCH</option>
+					
+					<option>ACTION_ALL_APPS</option>
+					<option>ACTION_APP_ERROR</option>
+					<option>ACTION_ASSIST</option>
+					<option>ACTION_BUG_REPORT</option>
+					<option>ACTION_CALL_BUTTON</option>
+					<option>ACTION_CREATE_DOCUMENT</option>
+					<option>ACTION_CREATE_SHORTCUT</option>
+					<option>ACTION_FACTORY_TEST</option>
+					<option>ACTION_GET_CONTENT</option>
+					<option>ACTION_INSERT</option>
+					<option>ACTION_PASTE</option>
+					<option>ACTION_INSERT_OR_EDIT</option>
+					<option>ACTION_INSTALL_PACKAGE</option>
+					<option>ACTION_MANAGE_NETWORK_USAGE</option>
+					<option>ACTION_OPEN_DOCUMENT</option>
+					<option>ACTION_OPEN_DOCUMENT_TREE</option>
+					<option>ACTION_PICK_ACTIVITY</option>
+					<option>ACTION_POWER_USAGE_SUMMARY</option>
+					<option>ACTION_PROCESS_TEXT</option>
+					<option>ACTION_SEARCH_LONG_PRESS</option>
+					<option>ACTION_SEND_MULTIPLE</option>
+					<option>ACTION_SET_WALLPAPER</option>
+					<option>ACTION_SYSTEM_TUTORIAL</option>
+					<option>ACTION_UNINSTALL_PACKAGE</option>
+					<option>ACTION_VOICE_COMMAND</option>
+				</select>
+				
+				OR <input type='text' name='action[1]' placeholder='ACTION_MAIN'>
+			</label>
+			
+			<label>
+				Category
+				<select id='category' name='category[0]'>
+					<option></option>
+					<option>CATEGORY_ALTERNATIVE</option>
+					<option>CATEGORY_APP_BROWSER</option>
+					<option>CATEGORY_APP_CALCULATOR</option>
+					<option>CATEGORY_APP_CALENDAR</option>
+					<option>CATEGORY_APP_CONTACTS</option>
+					<option>CATEGORY_APP_EMAIL</option>
+					<option>CATEGORY_APP_GALLERY</option>
+					<option>CATEGORY_APP_MAPS</option>
+					<option>CATEGORY_APP_MARKET</option>
+					<option>CATEGORY_APP_MESSAGING</option>
+					<option>CATEGORY_APP_MUSIC</option>
+					<option>CATEGORY_BROWSABLE</option>
+					<option>CATEGORY_CAR_DOCK</option>
+					<option>CATEGORY_CAR_MODE</option>
+					<option>CATEGORY_DEFAULT</option>
+					<option>CATEGORY_DESK_DOCK</option>
+					<option>CATEGORY_DEVELOPMENT_PREFERENCE</option>
+					<option>CATEGORY_EMBED</option>
+					<option>CATEGORY_FRAMEWORK_INSTRUMENTATION_TEST</option>
+					<option>CATEGORY_HE_DESK_DOCK</option>
+					<option>CATEGORY_HOME</option>
+					<option>CATEGORY_INFO</option>
+					<option>CATEGORY_LAUNCHER</option>
+					<option>CATEGORY_LEANBACK_LAUNCHER</option>
+					<option>CATEGORY_LE_DESK_DOCK</option>
+					<option>CATEGORY_MONKEY</option>
+					<option>CATEGORY_OPENABLE</option>
+					<option>CATEGORY_PREFERENCE</option>
+					<option>CATEGORY_SAMPLE_CODE</option>
+					<option>CATEGORY_SELECTED_ALTERNATIVE</option>
+					<option>CATEGORY_TAB</option>
+					<option>CATEGORY_TEST</option>
+					<option>CATEGORY_UNIT_TEST</option>
+					<option>CATEGORY_VOICE</option>
+				</select>
+				
+				OR <input type='text' name='categpry[1]' placeholder='CATEGORY_HOME'>
+			</label>
+			
+			<label>
+				Type (explicit MIME data type)
+				<select id='type' name='type[0]'>
+					<option></option>
+				
+					<optgroup label="text">
+						<option>text/css</option>
+						<option>text/csv</option>
+						<option>text/html</option>
+						<option>text/javascript</option>
+						<option>text/plain</option>
+						<option>text/xml</option>
+					</optgroup>
+					
+					<optgroup label="video">
+						<option>video/mpeg</option>
+						<option>video/mp4</option>
+						<option>video/ogg</option>
+						<option>video/quicktime</option>
+						<option>video/webm</option>
+						<option>video/x-ms-wmv</option>
+						<option>video/x-flv</option>
+						<option>video/3gpp</option>
+						<option>video/3gpp2</option>
+					</optgroup>
+					
+					<optgroup label="image">
+						<option>image/gif</option>
+						<option>image/jpeg</option>
+						<option>image/png</option>
+						<option>image/pjpeg</option>
+						<option>image/svg+xml</option>
+						<option>image/tiff</option>
+						<option>image/vnd.microsoft.icon</option>
+						<option>image/vnd.wap.wbmp</option>
+						<option></option>
+					</optgroup>
+					
+					<optgroup label="audio">
+						<option>audio/basic</option>
+						<option>audio/L24</option>
+						<option>audio/mp4</option>
+						<option>audio/aac</option>
+						<option>audio/mpeg</option>
+						<option>audio/ogg</option>
+						<option>audio/vorbis</option>
+						<option>audio/x-ms-wma</option>
+						<option>audio/x-ms-wax</option>
+						<option>audio/vnd.rn-realaudio</option>
+						<option>audio/vnd.wave</option>
+						<option>audio/webm</option>
+					</optgroup>
+					
+					<optgroup label="vnd">
+						<option>vnd.android-dir/mms-sms</option>
+					</optgroup>
+					
+					<optgroup label="application">
+						<option>application/atom+xml</option>
+						<option>application/EDI-X12</option>
+						<option>application/EDIFACT</option>
+						<option>application/json</option>
+						<option>application/javascript</option>
+						<option>application/octet-stream</option>
+						<option>application/ogg</option>
+						<option>application/pdf</option>
+						<option>application/postscript</option>
+						<option>application/soap+xml</option>
+						<option>application/font-woff</option>
+						<option>application/xhtml+xml</option>
+						<option>application/xml-dtd</option>
+						<option>application/xop+xml</option>
+						<option>application/zip</option>
+						<option>application/gzip</option>
+						<option>application/x-bittorrent</option>
+						<option>application/x-tex</option>
+					</optgroup>
+					
+					<optgroup label="multipart">
+						<option>multipart/mixed</option>
+						<option>multipart/alternative</option>
+						<option>multipart/related</option>
+						<option>multipart/form-data</option>
+						<option>multipart/signed</option>
+						<option>multipart/encrypted</option>
+					</optgroup>
+					
+					<optgroup label="application/x">
+						<option>application/x-www-form-urlencoded</option>
+						<option>application/x-dvi</option>
+						<option>application/x-latex</option>
+						<option>application/x-font-ttf</option>
+						<option>application/x-shockwave-flash</option>
+						<option>application/x-stuffit</option>
+						<option>application/x-rar-compressed</option>
+						<option>application/x-tar</option>
+						<option>text/x-jquery-tmpl</option>
+						<option>application/x-javascript</option>
+					</optgroup>
+				</select>
+				
+				OR <input name='type[1]' placeholder='text/plain'>
+			</label>
+			
+			<label>
+				Package 
+				<input name='package[0]' placeholder='com.application.name'>
+			</label>
+			
+			<label>
+				Component 
+				<div class='extras'>
+					<input type='text' name='component[0]' placeholder="com.application.name">
+					<input type='text' name='component[1]' placeholder="com.application.name.MyActivity">
+				</div>
+			</label>
+			
+			<label>
+				Uri 
+				<input name='uri[0]' placeholder='file:///sdcard/index.html'>
+			</label>
+			
+			<label>
+				Flags 
+				<select multiple name='flags[0]'>
+					<option></option>
+					<option>FLAG_ACTIVITY_CLEAR_TOP</option>
+					<option>FLAG_ACTIVITY_CLEAR_TASK</option>
+					<option>FLAG_ACTIVITY_SINGLE_TOP</option>
+					<option>FLAG_ACTIVITY_BROUGHT_TO_FRONT</option>
+					<option>FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET</option>
+					<option>FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS</option>
+					<option>FLAG_ACTIVITY_FORWARD_RESULT</option>
+					<option>FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY</option>
+					<option>FLAG_ACTIVITY_MULTIPLE_TASK</option>
+					<option>FLAG_ACTIVITY_NEW_DOCUMENT</option>
+					<option>FLAG_ACTIVITY_NEW_TASK</option>
+					<option>FLAG_ACTIVITY_NO_ANIMATION</option>
+					<option>FLAG_ACTIVITY_NO_HISTORY</option>
+					<option>FLAG_ACTIVITY_NO_USER_ACTION</option>
+					<option>FLAG_ACTIVITY_PREVIOUS_IS_TOP</option>
+					<option>FLAG_ACTIVITY_REORDER_TO_FRONT</option>
+					<option>FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</option>
+					<option>FLAG_ACTIVITY_RETAIN_IN_RECENTS</option>
+					<option>FLAG_ACTIVITY_TASK_ON_HOME</option>
+					<option>FLAG_DEBUG_LOG_RESOLUTION</option>
+					<option>FLAG_EXCLUDE_STOPPED_PACKAGES</option>
+					<option>FLAG_FROM_BACKGROUND</option>
+					<option>FLAG_GRANT_PERSISTABLE_URI_PERMISSION</option>
+					<option>FLAG_GRANT_PREFIX_URI_PERMISSION</option>
+					<option>FLAG_GRANT_READ_URI_PERMISSION</option>
+					<option>FLAG_GRANT_WRITE_URI_PERMISSION</option>
+					<option>FLAG_INCLUDE_STOPPED_PACKAGES</option>
+					<option>FLAG_RECEIVER_FOREGROUND</option>
+					<option>FLAG_RECEIVER_NO_ABORT</option>
+					<option>FLAG_RECEIVER_REGISTERED_ONLY</option>
+					<option>FLAG_RECEIVER_REPLACE_PENDING</option>
+				</select>
+			</label>
+			
+			
+			<label class='l_extras'>
+				Extras
+				<div class='extras'>
+					<input type='text' name='extras[0][0]'> = 
+					<input type='text' name='extras[0][1]'>
+					<button class='remove_extras' type='button'>- Remove</button>
+				</div> <button id='add_extras' type='button'>+ Add</button>
+			</label>
+			
+			<label class='l_stype'>
+				START TYPE:
+				
+				<input type='radio' name='intentstart' value='startActivity' checked> startActivity()
+				
+				<input type='radio' name='intentstart' value='startActivityForResult'> startActivityForResult()
+				
+				<input type='radio' name='intentstart' value='sendBroadcast'> sendBroadcast()
+			</label>
+			
+			<button id='build' type='button'>build</button>
+			<button id='run' type='button'>run</button>
+		</form>
+	</div>
+	
+	<div id='right'>
+		Script builder
+		
+		<pre id='result'>
+		
+		</pre>
+		
+<div id='template'>
+var sApp = startApp.set({ /* params */
+	{$VALUES$}
+}, {$EXTRAS$});
+
+
+sApp.check(function(values) { /* success */
+	console.log(values)
+}, function(error) { /* fail */
+	alert(error);
+});
+
+sApp.start(function() { /* success */
+	console.log(values)
+}, function(error) { /* fail */
+	alert(error);
+});
+</div>
+
+
+	</div>
+</body>
+</html>

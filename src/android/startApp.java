@@ -2,7 +2,7 @@
 	com.lampa.startapp
 	https://github.com/lampaa/com.lampa.startapp
 	
-	Phonegap 3 plugin for check or launch other application in android device (iOS support).
+	Phonegap plugin for check or launch other application in android device (iOS support).
 	bug tracker: https://github.com/lampaa/com.lampa.startapp/issues
 */
 package com.lampa.startapp;
@@ -18,17 +18,17 @@ import android.content.Intent;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import java.util.Iterator;
 import android.net.Uri;
+import java.lang.reflect.Field;
+import android.content.ActivityNotFoundException;
+import android.util.Log;
+import android.os.Bundle;
 
-/**
- * This class provides access to vibration on the device.
- */
 public class startApp extends CordovaPlugin {
 
-    /**
-     * Constructor.
-     */
+	public static final String TAG = "startApp";
     public startApp() { }
 
     /**
@@ -44,7 +44,13 @@ public class startApp extends CordovaPlugin {
             this.start(args, callbackContext);
         }
 		else if(action.equals("check")) {
-			this.check(args.getString(0), callbackContext);
+			this.check(args, callbackContext);
+		}
+		else if(action.equals("getExtras")) {
+			this.getExtras(callbackContext);
+		}
+		else if(action.equals("getExtra")) {
+			this.getExtra(args, callbackContext);
 		}
 		
 		return true;
@@ -57,148 +63,276 @@ public class startApp extends CordovaPlugin {
      * startApp
      */
     public void start(JSONArray args, CallbackContext callback) {
-		
 		Intent LaunchIntent;
+		JSONObject params;
+		JSONArray flags;
+		JSONArray component;
 		
-		String com_name = null;
+		JSONObject extra;
+		JSONObject key_value;
+		String key;
+		String value;
 		
-		String activity = null;
-		String spackage = null;
-		String intetype = null;
-		String intenuri = null;
+		int i;
 		
 		try {
-			if (args.get(0) instanceof JSONArray) {
-				com_name = args.getJSONArray(0).getString(0);
-				activity = args.getJSONArray(0).getString(1);
+			
+			
+			if (args.get(0) instanceof JSONObject) {
+				params = args.getJSONObject(0);
 				
-				if(args.getJSONArray(0).length() > 2) {
-					spackage = args.getJSONArray(0).getString(2);
-				}
-				
-				if(args.getJSONArray(0).length() > 3) {
-					intetype = args.getJSONArray(0).getString(3);
-				}
-				
-				if(args.getJSONArray(0).length() > 4) {
-					intenuri = args.getJSONArray(0).getString(4);
-				}
-			}
-			else {
-				com_name = args.getString(0);
-			}
-		
-			/**
-			 * call activity
-			 */
-			if(activity != null) {
-				if(com_name.equals("action")) {
-					/**
-					 * . < 0: VIEW
-					 * . >= 0: android.intent.action.VIEW
-					 */
-					if(activity.indexOf(".") < 0) {
-						activity = "android.intent.action." + activity;
-					}
-					
-					// if uri exists
-					if(intenuri != null) {
-						LaunchIntent = new Intent(activity, Uri.parse(intenuri));
-					}
-					else {
-						LaunchIntent = new Intent(activity);
-					}
+				/**
+				 * set package
+				 * http://developer.android.com/reference/android/content/Intent.html#setPackage(java.lang.String)
+				 */
+				if(params.has("package")) {
+					LaunchIntent = cordova.getActivity().getPackageManager().getLaunchIntentForPackage(params.getString("package"));
 				}
 				else {
-					LaunchIntent = new Intent();
-					LaunchIntent.setComponent(new ComponentName(com_name, activity));
+					LaunchIntent = new Intent();	
 				}
+				
+				/**
+				 * set action
+				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setAction%28java.lang.String%29
+				 */
+				if(params.has("action")) {
+					LaunchIntent.setAction(getIntentValueString(params.getString("action")));	
+				}
+				
+				/**
+				 * set category
+				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#addCategory%28java.lang.String%29
+				 */
+				if(params.has("category")) {
+					LaunchIntent.addCategory(getIntentValueString(params.getString("category")));	
+				}
+				
+				/**
+				 * set type
+				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType%28java.lang.String%29
+				 */
+				if(params.has("type")) {
+					LaunchIntent.setType(params.getString("type"));	
+				}
+				
+
+				
+				/**
+				 * set data (uri)
+				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setData%28android.net.Uri%29
+				 */
+				if(params.has("uri")) {
+					LaunchIntent.setData(Uri.parse(params.getString("uri")));
+				}
+				
+				/**
+				 * set flags
+				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#addFlags%28int%29
+				 */
+				if(params.has("flags")) {
+					flags = params.getJSONArray("flags");
+					
+					for(i=0; i < flags.length(); i++) {
+						LaunchIntent.addFlags(getIntentValue(flags.getString(i))); 	
+					}
+				}
+				
+				/**
+				 * set component
+				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setComponent%28android.content.ComponentName%29
+				 */
+				if(params.has("component")) {
+					component = params.getJSONArray("component");
+					
+					if(component.length() == 2) {
+						LaunchIntent.setComponent(new ComponentName(component.getString(0), component.getString(1)));	
+					}
+				}
+				
+				/**
+				 * set extra fields
+				 */
+				if(!args.isNull(1)) {
+					extra = args.getJSONObject(1);
+					Iterator<String> iter = extra.keys();
+							
+					while (iter.hasNext()) {
+						key = iter.next();
+						
+						value = extra.getString(key);
+						LaunchIntent.putExtra(parseExtraName(key), value);
+					}
+				}
+
+				/**
+				 * launch intent
+				 */
+				if(params.has("intentstart") && "startActivityForResult".equals(params.getString("intentstart"))) {
+					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
+				}
+				if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
+					cordova.getActivity().sendBroadcast(LaunchIntent);	
+				}
+				else {
+					cordova.getActivity().startActivity(LaunchIntent);	
+				}
+				
+				callback.success();
 			}
 			else {
-				LaunchIntent = this.cordova.getActivity().getPackageManager().getLaunchIntentForPackage(com_name);
+				callback.error("Incorrect params, array is not array object!");
 			}
-			
-			/**
-			 * setPackage, http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)
-			 */
-			if(spackage != null) {
-				LaunchIntent.setPackage(spackage);
-			}
-			
-			/**
-			 * setType, http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)
-			 */
-			if(intetype != null) {
-				LaunchIntent.setType(intetype);
-			}
-			
-			/**
-			 * put arguments
-			 */
-			if(args.length() > 1) {
-				JSONArray params = args.getJSONArray(1);
-				JSONObject key_value;
-				String key;
-				String value;
-
-				for(int i = 0; i < params.length(); i++) {
-					if (params.get(i) instanceof JSONObject) {
-						Iterator<String> iter = params.getJSONObject(i).keys();
-						
-						 while (iter.hasNext()) {
-							key = iter.next();
-							try {
-								value = params.getJSONObject(i).getString(key);
-								
-								LaunchIntent.putExtra(key, value);
-							} catch (JSONException e) {
-								callback.error("json params: " + e.toString());
-							}
-						}
-					}
-					else {
-						LaunchIntent.setData(Uri.parse(params.getString(i)));
-					}
-				}
-			}
-			
-			/**
-			 * start activity
-			 */
-			this.cordova.getActivity().startActivity(LaunchIntent);
-			callback.success();
-			
-		} catch (JSONException e) {
-			callback.error("json: " + e.toString());
-		} catch (Exception e) {
-			callback.error("intent: " + e.toString());
-        }
+		} 
+		catch (JSONException e) {
+			callback.error("JSONException: " + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e) {
+			callback.error("IllegalAccessException: " + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (NoSuchFieldException e) {
+			callback.error("NoSuchFieldException: " + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (ActivityNotFoundException e) {
+			callback.error("ActivityNotFoundException: " + e.getMessage());
+			e.printStackTrace();
+		}
     }
 
     /**
      * checkApp
      */	 
-	public void check(String component, CallbackContext callback) {
-		PackageManager pm = this.cordova.getActivity().getApplicationContext().getPackageManager();
+	public void check(JSONArray args, CallbackContext callback) {
+		JSONObject params;
+		
 		try {
-			/**
-			 * get package info
-			 */
-			PackageInfo PackInfo = pm.getPackageInfo(component, PackageManager.GET_ACTIVITIES);
-			
-			/**
-			 * create json object
-			 */
+			if (args.get(0) instanceof JSONObject) {
+				params = args.getJSONObject(0);
+		
+		
+				if(params.has("package")) {
+					PackageManager pm = cordova.getActivity().getApplicationContext().getPackageManager();
+					
+					/**
+					 * get package info
+					 */
+					PackageInfo PackInfo = pm.getPackageInfo(params.getString("package"), PackageManager.GET_ACTIVITIES);
+						
+					/**
+					 * create json object
+					 */
+					JSONObject info = new JSONObject();
+						
+					info.put("versionName", PackInfo.versionName);
+					info.put("packageName", PackInfo.packageName);
+					info.put("versionCode", PackInfo.versionCode);
+					info.put("applicationInfo", PackInfo.applicationInfo);
+						
+					callback.success(info);
+				}
+				else {
+					callback.error("Value \"package\" in null!");
+				}
+			}
+			else {
+				callback.error("Incorrect params, array is not array object!");
+			}
+		} catch (JSONException e) {
+			callback.error("json: " + e.toString());
+			e.printStackTrace();
+		}
+		catch (NameNotFoundException e) {
+			callback.error("NameNotFoundException: " + e.toString());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * getExtras
+	 */
+	public void getExtras(CallbackContext callback) {
+		try {
+			Bundle extras = cordova.getActivity().getIntent().getExtras(); 
 			JSONObject info = new JSONObject();
-			
-			info.put("versionName", PackInfo.versionName);
-			info.put("packageName", PackInfo.packageName);
-			info.put("versionCode", PackInfo.versionCode);
-			info.put("applicationInfo", PackInfo.applicationInfo);
+
+			if (extras != null) {
+				for (String key : extras.keySet()) {
+					info.put(key, extras.get(key).toString());
+				}
+			}
 			
 			callback.success(info);
-		} catch (Exception e) {
-			callback.error(e.toString());
 		}
+		catch(JSONException e) {
+			callback.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * getExtra
+	 */
+	public void getExtra(JSONArray args, CallbackContext callback) {
+		try {
+			String extraName = parseExtraName(args.getString(0));
+			Intent extraIntent = cordova.getActivity().getIntent();
+
+			if(extraIntent.hasExtra(extraName)) {
+				String extraValue = extraIntent.getStringExtra(extraName);
+				
+				if (extraValue == null) {
+					extraValue = ((Uri) extraIntent.getParcelableExtra(extraName)).toString();
+				}
+
+				callback.success(extraValue);
+			}
+			else {
+				callback.error("extra field not found");	
+			}
+		}
+		catch(JSONException e) {
+			callback.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * static functions
+	 */
+	static String parseExtraName(String extraName) {
+		String parseIntentExtra = extraName;
+		
+		try {
+			parseIntentExtra = getIntentValueString(extraName);
+			Log.i(TAG, parseIntentExtra);
+		}
+		catch(NoSuchFieldException e) {
+			parseIntentExtra = extraName;	
+		}
+		catch(IllegalAccessException e) {
+			e.printStackTrace();
+			return extraName;
+		}
+		
+		Log.e(TAG, parseIntentExtra);
+		
+		return parseIntentExtra;
+	}
+	
+	static String getIntentValueString(String flag) throws NoSuchFieldException, IllegalAccessException {
+		Field field = Intent.class.getDeclaredField(flag);
+		field.setAccessible(true);
+
+		return (String) field.get(null);
+	}
+	
+	static int getIntentValue(String flag) throws NoSuchFieldException, IllegalAccessException {
+		Field field = Intent.class.getDeclaredField(flag);
+		field.setAccessible(true);
+		
+		return field.getInt(null);
 	}
 }

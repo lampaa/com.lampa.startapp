@@ -1,34 +1,60 @@
+cordova.define("com.lampa.startapp", function(require, exports, module) {
 /**
 	com.lampa.startapp
 	https://github.com/lampaa/com.lampa.startapp
 	
-	Phonegap 3 plugin for check or launch other application in android device (iOS support).
-	bug tracker: https://github.com/lampaa/org.apache.cordova.startapp/issues
-	
-	!! THIS SCRIPT FILE TO CORDOVA 3.5.*
-	If you are using a version lower than 3.5, read this theme: https://github.com/lampaa/org.apache.cordova.startapp/issues/5#issuecomment-49974214
+	Phonegap plugin for check or launch other application in android device (iOS support).
+	bug tracker: https://github.com/lampaa/com.lampa.startapp/issues
 */
+
 var exec = require('cordova/exec');
 
 module.exports = {
 	/** 
-	 * Check application for installed on device
+	 * Set application params
 	 *
-	 * @param {String} message              app name
-	 * @param {Function} completeCallback   The callback that is called when open app
-	 * @param {Function} errorCallback		The callback that is called when application is not installed
-	 */
-	check: function(message, completeCallback, errorCallback) {
-		exec(completeCallback, errorCallback, "startApp", "check", [message]);
-	},
-	/** 
-	 * Start application on device
-	 *
-	 * @param {Mixed} message				params, view documentation https://github.com/lampaa/com.lampa.startapp
-	 * @param {Function} completeCallback   The callback that is called when open app
+	 * @param {Mixed} params				params, view documentation https://github.com/lampaa/com.lampa.startapp
+	 * @param {Mixed} extra   				Extra fields
 	 * @param {Function} errorCallback		The callback that is called when an error occurred when the program starts.
+	 *
 	 */
-	start: function(message, completeCallback, errorCallback) {
-		exec(completeCallback, errorCallback, "startApp", "start", (typeof message === 'string') ? [message] : message);
-	}	
+	 
+	set: function(params, extra) {
+		var output = [params];
+			
+		if(extra != undefined) {
+			output.push(extra);
+		}
+		else {
+			output.push(null);
+		}
+		
+		return {
+			start: function(completeCallback, errorCallback) {
+				completeCallback = completeCallback || function() {};
+				errorCallback = errorCallback || function() {};
+				
+				exec(completeCallback, errorCallback, "startApp", "start", output);
+			},
+			check: function(completeCallback, errorCallback) {
+				completeCallback = completeCallback || function() {};
+				errorCallback = errorCallback || function() {};
+				
+				exec(completeCallback, errorCallback, "startApp", "check", output);
+			}
+		}
+	},
+	/**
+	 * extra values
+	 */
+	getExtras: function(completeCallback, errorCallback) {
+		exec(completeCallback, errorCallback, "startApp", "getExtras", []);
+	},
+	getExtra: function(extraValue, completeCallback, errorCallback) {
+		exec(completeCallback, errorCallback, "startApp", "getExtra", [extraValue]);
+	},
+	hasExtra: function(extraValue, completeCallback, errorCallback) {
+		this.getExtra(extraValue, completeCallback, errorCallback);
+	}
 }
+});

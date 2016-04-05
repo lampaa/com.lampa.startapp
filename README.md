@@ -13,172 +13,207 @@ Delete:  ```cordova plugin rm com.lampa.startapp```
 Delete previos version:  ```cordova plugin rm org.apache.cordova.startapp```
 
 ===========================================
+[Manually installation for Android.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
 
-Manually installation for Android:
 
-Add to ```/my-app/platforms/android/res/xml/config.xml```:
-```xml
-<feature name="startApp">
-	<param name="android-package" value="com.lampa.startapp.startApp" />
-</feature>
-```
-Add to ```/my-app/platforms/android/assets/www/cordova_plugins.js```:
-```javascript
-{
-	"file": "plugins/com.lampa.startapp/www/startApp.js",
-	"id": "com.lampa.startapp.startapp",
-	"merges": [
-		"navigator.startApp"
-	]
-}
-```
-Add to ```/my-app/platforms/android/assets/www/plugins/com.lampa.startapp/www/``` file:
-https://github.com/lampaa/com.lampa.startapp/blob/master/www/startApp.js
-
-Add to ```/my-app/platforms/android/src/com/lampa/startapp/``` file:
-https://github.com/lampaa/com.lampa.startapp/blob/master/src/android/startApp.java
-
+NEW! [Script builder](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
 
 
 use:  **ANDROID**
 
-_Check application for installed_
+_Set appication parameters_
 
-If success, returned application info: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
 ```javascript
-navigator.startApp.check("com.application.name", function(message) { /* success */
-    console.log("app exists: "); 
-    console.log(message.versionName); 
-    console.log(message.packageName); 
-    console.log(message.versionCode); 
-    console.log(message.applicationInfo); 
-}, 
-function(error) { /* error */
-    console.log(error);
+var sApp = startApp.set({ /* params */
+	"action":"ACTION_MAIN",
+	"category":"CATEGORY_DEFAULT",
+	"type":"text/css",
+	"package":"com.lampa.startapp",
+	"uri":"file://data/index.html",
+	"intentstart":"startActivity",
+	"flags":["FLAG_ACTIVITY_CLEAR_TOP","FLAG_ACTIVITY_CLEAR_TASK"],
+	"component": ["com.app.name","com.app.name.Activity"]
+}, { /* extras */
+	"extraKey1":"extraValue1",
+	"extraKey2":"extraValue2"
 });
 ```
 
-_Start application without parameters_
+`action` these is a Intent action [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) (optional, defaul null).
 
+`category` these is a Intent method [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) (optional, defaul null).
+
+`type` these is a Intent method [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)) (optional, defaul null).
+
+`package` (default null) these is a Intent method [Intent setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) (optional, defaul null).
+
+`uri` (default null) these is a Intent data Uri [Intent Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) (optional, defaul null).
+
+`flags` (default null) these is a Intent method [Intent setFlags](http://developer.android.com/reference/android/content/Intent.html#setFlags(int)) (optional, defaul null).
+
+`component` (default null) these is a Intent method [Intent setComponent](http://developer.android.com/reference/android/content/Intent.html#setComponent(android.content.ComponentName)) (optional, defaul null).
+
+
+return ```startApp``` object:
+```javascript
+sApp.start(function() { /* success */
+	console.log("OK");
+}, function(error) { /* fail */
+	alert(error);
+});
+```
+or
+```javascript
+sApp.check(function(values) { /* success */
+	console.log(values);
+}, function(error) { /* fail */
+	alert(error);
+});
+```
+If success, values contains data: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
+
+
+**Samples**
+
+_Set application as only package name_:
 ```js
-navigator.startApp.start("com.application.name", function(message) {  /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
+var sApp = startApp.set({
+	"package":"com.application.name"
 });
 ```
 
-_Start application with params. First variant with package and activity:
+_Set application as package and activity_:
 ```js
-navigator.startApp.start([["com.app.name", "com.app.name.Activity"]], function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
+var sApp = startApp.set({
+	"component": ["com.app.name","com.app.name.Activity"]
 });
 ```
-_Start application with params. Second variant with action and action params:
+
+_Set application as action, package, type and Uri_:
 ```js
-navigator.startApp.start([["action", "ACTION_NAME", "PACKAGE", "TYPE", "URI"]], function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
+var sApp = startApp.set({ /* params */
+	"action":"ACTION_MAIN",
+	"type":"text/css",
+	"package":"com.lampa.startapp",
+	"uri":"file://data/index.html"
 });
 ```
-`ACTION_NAME` these is a Intent flag [Intent Flags](http://developer.android.com/reference/android/content/Intent.html) (MAIN, VIEW, CALL, etc..).
-
-`PACKAGE` these is a Intent method [setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) (optional or set null)
-
-`TYPE` these is a Intent method [setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)) (optional or set null)
-
-`URI` these is a Intent data Uri [Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) (optional or set null)
 
 
-> **Important!** First value of first parameter of _start_ method can be either a string or an array. And the array must contain two parameters. Example:
-> 
-> ["com.app.name", [....]] or [["com.app.name", "com.app.name.Activity"] [....]]
-
-
-_Start application with only values_
+_Start application with extra fields_
 
 ```js
-navigator.startApp.start([[...], ["set_param1", "set_param2",..., "set_paramN"]], function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
+var sApp = startApp.set({ /* params */
+	"component": ["com.app.name","com.app.name.Activity"]
+}, { /* extras */
+	"extraKey1":"extraValue1",
+	"extraKey2":"extraValue2"
 });
 ```
-_ANDROID: Start application with key:value parameters_
-
-```js
-navigator.startApp.start([[...], [{"key1":"value1"},{"key2":"value2"}, {...}, {"keyN":"valueN"}]], function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
-});
-```
-Example, call application with activity and key:value param:
-
-```js
-navigator.startApp.start([["app.com.name", "app.com.name.Activity"], [{"product_id":"100"}]], ...);
-```
-
 
 
 Example, call skype:
 ```js
-navigator.startApp.start([["action", "VIEW"], ["skype:+79109999999"]], ...);
+startApp.set({ /* params */
+	"action": "ACTION_VIEW",
+	"uri": "skype:+79109999999"
+}).start();
 ```
 Example, call phone:
 ```js
-navigator.startApp.start([["action", "CALL"], ["tel:+79109999999"]], ...);
+startApp.set({ /* params */
+	"action": "ACTION_CALL",
+	"uri": "tel:+79109999999"
+}).start();
 ```
 Example, call browser:
 ```js
-navigator.startApp.start([["action", "VIEW"], ["https://github.com/lampaa"]], ...);
+startApp.set({ /* params */
+	"action": "ACTION_VIEW",
+	"uri": "https://github.com/lampaa"
+}).start();
 ```
 Example, call facebook:
 ```js
-navigator.startApp.start([["action", "VIEW"], ["fb://facewebmodal/f?href=https://www.facebook.com/GitHub"]], ...);
+startApp.set({ /* params */
+	"action": "ACTION_VIEW",
+	"uri": "fb://facewebmodal/f?href=https://www.facebook.com/GitHub"
+}).start();
 ```
 Example, call whatsapp:
 ```js
-navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain"], [{"android.intent.extra.TEXT":"Text..."}]], ...);
+startApp.set({ /* params */
+	"action": "ACTION_SEND",
+	"package": "com.whatsapp",
+	"type": "text/plain"
+}, {
+	"android.intent.extra.TEXT":"Text..."
+}).start();
 ```
 Example, call whatsapp chat:
 ```js
-navigator.startApp.start([["action", "SEND", "com.whatsapp", "text/plain", "+79123456789"], [{"android.intent.extra.TEXT":"Text..."}, {"chat": true}]], ...);
+startApp.set({ /* params */
+	"action": "ACTION_SEND",
+	"package": "com.whatsapp",
+	"type": "text/plain",
+	"uri": "+79123456789"
+}, {
+	"android.intent.extra.TEXT":"Text...",
+	"chat": true
+}).start();
 ```
-
+Example, call sms:
+```js
+startApp.set({ /* params */
+	"action": "ACTION_MAIN",
+	"category": "CATEGORY_DEFAULT",
+	"type": "vnd.android-dir/mms-sms"
+}).start();
+```
+Example, play mp4 video:
+```js
+startApp.set({ /* params */
+	"action": "ACTION_VIEW",
+	"uri": "http://domain.com/videofile.mp4",
+	"type": "video/mp4"
+}).start();
+```
+Example, open contacts book:
+```js
+startApp.set({ /* params */
+	"action": "ACTION_PICK",
+	"uri": "ContactsContract.Contacts.CONTENT_URI",
+	"type": "video/mp4",
+	"intentstart":"startActivityForResult"
+}).start();
+```
 
 
 Use **iOS**
 
-_Check iOS application for installed_
+_Set iOS application_
 
 ```js
-navigator.startApp.check("twitter://", function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
+var sApp = startApp.set("twitter://");
+```
+
+return ```startApp``` object:
+```javascript
+sApp.start(function() { /* success */
+	console.log("OK");
+}, function(error) { /* fail */
+	alert(error);
+});
+```
+or
+```javascript
+sApp.check(function(values) { /* success */
+	console.log(values);
+}, function(error) { /* fail */
+	alert(error);
 });
 ```
 
-_Start iOS application_
-
-```js
-navigator.startApp.start("twitter://", function(message) { /* success */
-	console.log(message); // => OK
-}, 
-function(error) { /* error */
-	console.log(error);
-});
-```
 ===========================================
 Tags: 
 

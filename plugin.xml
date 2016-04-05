@@ -2,15 +2,15 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 	id="com.lampa.startapp"
-	version="0.0.6">
+	version="0.1.0">
 
     <name>startApp</name>
-    <description>Phonegap 3 plugin for check or launch other application in android device.</description>
+    <description>Phonegap plugin for check or launch other application in android device.</description>
     <license>MIT</license>
     <keywords>cordova,startapp,lampa</keywords>
 
     <js-module src="www/startApp.js" name="startapp">
-        <merges target="navigator.startApp" />
+        <merges target="startApp" />
     </js-module>
 
     <!-- android -->
