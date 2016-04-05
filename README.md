@@ -1,3 +1,11 @@
+
+Describe your Changes
+Commit
+
+lampaa / com.lampa.startapp
+Review your changes:
+Additions are highlighted in green. Deletions are crossed out.
+
 # cordova plugin startapp
 
 Phonegap plugin for check or launch other application, get extras in phonegap app.
@@ -15,19 +23,6 @@ Phonegap plugin for check or launch other application, get extras in phonegap ap
 
 **NEW!** [Script builder.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md) Create script with ui builder.
 
-<<<<<<< HEAD
-===========================================
-[Manually installation for Android.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
-
-
-NEW! [Script builder](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
-
-
-use:  **ANDROID**
-
-_Set appication parameters_
-
-=======
 
 # ANDROID
 
@@ -56,7 +51,6 @@ Extras as a set of key-value:
 
 _Example_
 
->>>>>>> origin/master
 ```javascript
 var sApp = startApp.set({ /* params */
 	"action":"ACTION_MAIN",
@@ -64,57 +58,15 @@ var sApp = startApp.set({ /* params */
 	"type":"text/css",
 	"package":"com.lampa.startapp",
 	"uri":"file://data/index.html",
-<<<<<<< HEAD
-	"intentstart":"startActivity",
-	"flags":["FLAG_ACTIVITY_CLEAR_TOP","FLAG_ACTIVITY_CLEAR_TASK"],
-	"component": ["com.app.name","com.app.name.Activity"]
-}, { /* extras */
-	"extraKey1":"extraValue1",
-=======
 	"flags":["FLAG_ACTIVITY_CLEAR_TOP","FLAG_ACTIVITY_CLEAR_TASK"],
 	"component": ["com.app.name","com.app.name.Activity"],
 	"intentstart":"startActivity",
 }, { /* extras */
 	"EXTRA_STREAM":"extraValue1",
->>>>>>> origin/master
 	"extraKey2":"extraValue2"
 });
 ```
 
-<<<<<<< HEAD
-`action` these is a Intent action [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) (optional, defaul null).
-
-`category` these is a Intent method [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) (optional, defaul null).
-
-`type` these is a Intent method [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String)) (optional, defaul null).
-
-`package` (default null) these is a Intent method [Intent setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) (optional, defaul null).
-
-`uri` (default null) these is a Intent data Uri [Intent Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) (optional, defaul null).
-
-`flags` (default null) these is a Intent method [Intent setFlags](http://developer.android.com/reference/android/content/Intent.html#setFlags(int)) (optional, defaul null).
-
-`component` (default null) these is a Intent method [Intent setComponent](http://developer.android.com/reference/android/content/Intent.html#setComponent(android.content.ComponentName)) (optional, defaul null).
-
-
-return ```startApp``` object:
-```javascript
-sApp.start(function() { /* success */
-	console.log("OK");
-}, function(error) { /* fail */
-	alert(error);
-});
-```
-or
-```javascript
-sApp.check(function(values) { /* success */
-	console.log(values);
-}, function(error) { /* fail */
-	alert(error);
-});
-```
-If success, values contains data: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
-=======
 ```startApp.set()``` return object:
 ```javascript
 sApp.start(function() { /* success */
@@ -165,17 +117,12 @@ To has one extra field use method ```extraField```:
 startApp.hasExtra(field, function() { /* success */
 	console.log(fields);
 }, function() { /* fail */
->>>>>>> origin/master
 
 });
 ```
 Variable ```field``` is a String.
 
-<<<<<<< HEAD
-**Samples**
-=======
 # Samples
->>>>>>> origin/master
 
 _Set application as only package name_:
 ```js
@@ -285,10 +232,6 @@ Example, open contacts book:
 startApp.set({ /* params */
 	"action": "ACTION_PICK",
 	"uri": "ContactsContract.Contacts.CONTENT_URI",
-<<<<<<< HEAD
-	"type": "video/mp4",
-=======
->>>>>>> origin/master
 	"intentstart":"startActivityForResult"
 }).start();
 ```
@@ -308,7 +251,6 @@ sApp.start(function() { /* success */
 	console.log("OK");
 }, function(error) { /* fail */
 	alert(error);
-<<<<<<< HEAD
 });
 ```
 or
@@ -319,18 +261,6 @@ sApp.check(function(values) { /* success */
 	alert(error);
 });
 ```
-=======
-});
-```
-or
-```javascript
-sApp.check(function(values) { /* success */
-	console.log(values);
-}, function(error) { /* fail */
-	alert(error);
-});
-```
->>>>>>> origin/master
 
 ===========================================
 Tags: 
@@ -342,3 +272,5 @@ Launching External Intents Works on Cordova.
 Android launch external activities.
 Android check app availability.
 Android launch application with parameters. 
+
+Prose
