@@ -17,7 +17,7 @@ Add to ```/my-app/platforms/android/assets/www/cordova_plugins.js```:
 }
 ```
 Add to ```/my-app/platforms/android/assets/www/plugins/com.lampa.startapp/www/``` file:
-https://github.com/lampaa/com.lampa.startapp/blob/master/www/startApp.js
+https://github.com/lampaa/com.lampa.startapp/blob/master/www/startApp.manually.js
 
 Add to ```/my-app/platforms/android/src/com/lampa/startapp/``` file:
 https://github.com/lampaa/com.lampa.startapp/blob/master/src/android/startApp.java
