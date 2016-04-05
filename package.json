@@ -1,6 +1,6 @@
 {
   "name": "com.lampa.startapp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Phonegap plugin for check or launch other application in android device.",
   "cordova": {
     "id": "com.lampa.startapp",

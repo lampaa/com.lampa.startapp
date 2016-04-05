@@ -1,4 +1,3 @@
-cordova.define("com.lampa.startapp", function(require, exports, module) {
 /**
 	com.lampa.startapp
 	https://github.com/lampaa/com.lampa.startapp
@@ -57,4 +56,3 @@ module.exports = {
 		this.getExtra(extraValue, completeCallback, errorCallback);
 	}
 }
-});
