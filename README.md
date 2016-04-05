@@ -224,7 +224,6 @@ Example, open contacts book:
 startApp.set({ /* params */
 	"action": "ACTION_PICK",
 	"uri": "ContactsContract.Contacts.CONTENT_URI",
-	"type": "video/mp4",
 	"intentstart":"startActivityForResult"
 }).start();
 ```
