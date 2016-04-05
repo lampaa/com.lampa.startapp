@@ -1,17 +1,21 @@
-cordova plugin startapp
-===========================================================================
+# cordova plugin startapp
 
-Phonegap plugin for check or launch other application in android device.
+Phonegap plugin for check or launch other application, get extras in phonegap app.
 
-===========================================
-Install: ```cordova plugin add com.lampa.startapp```
+> Install: ```cordova plugin add com.lampa.startapp```
+> 
+> Install: ```cordova plugin add https://github.com/lampaa/com.lampa.startapp.git```
+> 
+> Delete:  ```cordova plugin rm com.lampa.startapp```
+> 
+> Delete previos version:  ```cordova plugin rm org.apache.cordova.startapp```
 
-Install: ```cordova plugin add https://github.com/lampaa/com.lampa.startapp.git```
+[Manually installation for Android.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
 
-Delete:  ```cordova plugin rm com.lampa.startapp```
 
-Delete previos version:  ```cordova plugin rm org.apache.cordova.startapp```
+**NEW!** [Script builder.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md) Create script with ui builder.
 
+<<<<<<< HEAD
 ===========================================
 [Manually installation for Android.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
 
@@ -23,6 +27,36 @@ use:  **ANDROID**
 
 _Set appication parameters_
 
+=======
+
+# ANDROID
+
+To run other application, you need to build data:
+```javascript
+var sApp = startApp.set({} params [, {} extras]);
+```
+| Param | Description | Default | Values |
+| --- | --- | --- | --- |
+| action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String |
+| category | [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) | null | String |
+| type | [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String))  | null | String |
+| package | [Intent setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) | null | String |
+| uri | [Intent Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) | null | String |
+| flags | [Intent setFlags](http://developer.android.com/reference/android/content/Intent.html#setFlags(int)) | null | String |
+| component | [Intent setComponent](http://developer.android.com/reference/android/content/Intent.html#setComponent(android.content.ComponentName)) | null |  String |
+| intentstart | set type of start intent  | startActivity | startActivity, startActivityForResult, sendBroadcast |
+
+Extras as a set of key-value:
+```javascript
+{
+	"key1":"value1",
+    "key2":"value2"
+}
+```
+
+_Example_
+
+>>>>>>> origin/master
 ```javascript
 var sApp = startApp.set({ /* params */
 	"action":"ACTION_MAIN",
@@ -30,15 +64,24 @@ var sApp = startApp.set({ /* params */
 	"type":"text/css",
 	"package":"com.lampa.startapp",
 	"uri":"file://data/index.html",
+<<<<<<< HEAD
 	"intentstart":"startActivity",
 	"flags":["FLAG_ACTIVITY_CLEAR_TOP","FLAG_ACTIVITY_CLEAR_TASK"],
 	"component": ["com.app.name","com.app.name.Activity"]
 }, { /* extras */
 	"extraKey1":"extraValue1",
+=======
+	"flags":["FLAG_ACTIVITY_CLEAR_TOP","FLAG_ACTIVITY_CLEAR_TASK"],
+	"component": ["com.app.name","com.app.name.Activity"],
+	"intentstart":"startActivity",
+}, { /* extras */
+	"EXTRA_STREAM":"extraValue1",
+>>>>>>> origin/master
 	"extraKey2":"extraValue2"
 });
 ```
 
+<<<<<<< HEAD
 `action` these is a Intent action [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) (optional, defaul null).
 
 `category` these is a Intent method [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) (optional, defaul null).
@@ -71,9 +114,68 @@ sApp.check(function(values) { /* success */
 });
 ```
 If success, values contains data: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
+=======
+```startApp.set()``` return object:
+```javascript
+sApp.start(function() { /* success */
+	console.log("OK");
+}, function(error) { /* fail */
+	alert(error);
+});
+```
+or
+```javascript
+sApp.check(function(values) { /* success */
+	console.log(values);
+}, function(error) { /* fail */
+	alert(error);
+});
+```
+If success, ```values``` contains data: `versionName`, `packageName`, `versionCode` and `applicationInfo`.
 
+To get all extra fields use method ```extraFiels```:
+```javascript
+startApp.extraFields(function(fields) { /* success */
+	console.log(fields);
+}, function() { /* fail */
 
+});
+```
+Variable ```fields``` contains object array, example:
+```javascript
+{
+	"key1":"value1",
+    "key2":"value2"
+}
+```
+
+To get one extra field use method ```getExtra```:
+```javascript
+startApp.getExtra(field, function(value) { /* success */
+	console.log(fields);
+}, function() { /* fail */
+
+});
+```
+Variable ```field``` is a String.
+Variable ```value``` contains String value.
+
+To has one extra field use method ```extraField```:
+```javascript
+startApp.hasExtra(field, function() { /* success */
+	console.log(fields);
+}, function() { /* fail */
+>>>>>>> origin/master
+
+});
+```
+Variable ```field``` is a String.
+
+<<<<<<< HEAD
 **Samples**
+=======
+# Samples
+>>>>>>> origin/master
 
 _Set application as only package name_:
 ```js
@@ -183,7 +285,10 @@ Example, open contacts book:
 startApp.set({ /* params */
 	"action": "ACTION_PICK",
 	"uri": "ContactsContract.Contacts.CONTENT_URI",
+<<<<<<< HEAD
 	"type": "video/mp4",
+=======
+>>>>>>> origin/master
 	"intentstart":"startActivityForResult"
 }).start();
 ```
@@ -203,6 +308,7 @@ sApp.start(function() { /* success */
 	console.log("OK");
 }, function(error) { /* fail */
 	alert(error);
+<<<<<<< HEAD
 });
 ```
 or
@@ -213,6 +319,18 @@ sApp.check(function(values) { /* success */
 	alert(error);
 });
 ```
+=======
+});
+```
+or
+```javascript
+sApp.check(function(values) { /* success */
+	console.log(values);
+}, function(error) { /* fail */
+	alert(error);
+});
+```
+>>>>>>> origin/master
 
 ===========================================
 Tags: 
