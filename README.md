@@ -1,11 +1,4 @@
 
-Describe your Changes
-Commit
-
-lampaa / com.lampa.startapp
-Review your changes:
-Additions are highlighted in green. Deletions are crossed out.
-
 # cordova plugin startapp
 
 Phonegap plugin for check or launch other application, get extras in phonegap app.
