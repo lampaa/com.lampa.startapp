@@ -110,7 +110,7 @@ jQuery(document).on('deviceready ready', function(e) {
 	
 	$('#run').on('click', function() {
 		// eval
-		console.log(new Function($result.html()));
+		console.log(eval($result.html()));
 	});
 	
 	/**
