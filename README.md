@@ -11,7 +11,7 @@ Phonegap plugin for check or launch other application, get extras in phonegap ap
 > 
 > Delete previos version:  ```cordova plugin rm org.apache.cordova.startapp```
 
-[Manually installation for Android.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md)
+[Manually installation for Android.](/MANUALLY_INSTALL.md)
 
 
 **NEW!** [Script builder.](/lampaa/com.lampa.startapp/MANUALLY_INSTALL.md) Create script with ui builder.
