@@ -200,7 +200,7 @@ startApp.set({ /* params */
 	"type": "text/plain",
 	"uri": "+79123456789"
 }, {
-	"android.intent.extra.TEXT":"Text...",
+	"EXTRA_TEXT":"Text...",
 	"chat": true
 }).start();
 ```
