@@ -81,15 +81,14 @@ public class startApp extends CordovaPlugin {
 			if (args.get(0) instanceof JSONObject) {
 				params = args.getJSONObject(0);
 				
+        			LaunchIntent = new Intent();
+
 				/**
 				 * set package
 				 * http://developer.android.com/reference/android/content/Intent.html#setPackage(java.lang.String)
 				 */
 				if(params.has("package")) {
-					LaunchIntent = cordova.getActivity().getPackageManager().getLaunchIntentForPackage(params.getString("package"));
-				}
-				else {
-					LaunchIntent = new Intent();	
+					LaunchIntent.setPackage(params.getString("package"));
 				}
 				
 				/**
