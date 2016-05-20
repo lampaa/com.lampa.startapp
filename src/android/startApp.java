@@ -43,17 +43,20 @@ public class startApp extends CordovaPlugin {
         if (action.equals("start")) {
             this.start(args, callbackContext);
         }
-		else if(action.equals("check")) {
-			this.check(args, callbackContext);
-		}
-		else if(action.equals("getExtras")) {
-			this.getExtras(callbackContext);
-		}
-		else if(action.equals("getExtra")) {
-			this.getExtra(args, callbackContext);
-		}
-		
-		return true;
+	else if (action.equals("go")) {
+            this.start(args, callbackContext);
+        }
+        else if(action.equals("check")) {
+                this.check(args, callbackContext);
+        }
+        else if(action.equals("getExtras")) {
+                this.getExtras(callbackContext);
+        }
+        else if(action.equals("getExtra")) {
+                this.getExtra(args, callbackContext);
+        }
+
+        return true;
     }
 
     //--------------------------------------------------------------------------

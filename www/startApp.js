@@ -40,6 +40,12 @@ module.exports = {
 				errorCallback = errorCallback || function() {};
 				
 				exec(completeCallback, errorCallback, "startApp", "check", output);
+			},
+			go: function(completeCallback, errorCallback) {
+				completeCallback = completeCallback || function() {};
+				errorCallback = errorCallback || function() {};
+				
+				exec(completeCallback, errorCallback, "startApp", "go", output);
 			}
 		}
 	},
