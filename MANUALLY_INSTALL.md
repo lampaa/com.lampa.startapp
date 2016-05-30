@@ -9,7 +9,7 @@ Add to ```/my-app/platforms/android/res/xml/config.xml```:
 Add to ```/my-app/platforms/android/assets/www/cordova_plugins.js```:
 ```javascript
 {
-	"file": "plugins/com.lampa.startapp/www/startApp.js",
+	"file": "plugins/com.lampa.startapp/www/startApp.manually.js",
 	"id": "com.lampa.startapp",
 	"merges": [
 		"startApp"
