@@ -43,7 +43,7 @@ public class startApp extends CordovaPlugin {
         if (action.equals("start")) {
             this.start(args, callbackContext);
         }
-	else if (action.equals("go")) {
+	else if(action.equals("go")) {
             this.start(args, callbackContext);
         }
         else if(action.equals("check")) {
