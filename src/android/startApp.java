@@ -30,6 +30,7 @@ public class startApp extends CordovaPlugin {
 
 	public static final String TAG = "startApp";
     public startApp() { }
+	private boolean NO_PARSE_INTENT_VALS = false;
 
     /**
      * Executes the request and returns PluginResult.
@@ -37,7 +38,7 @@ public class startApp extends CordovaPlugin {
      * @param action            The action to execute.
      * @param args              JSONArray of arguments for the plugin.
      * @param callbackContext   The callback context used when calling back into JavaScript.
-     * @return                  True when the action was valid, false otherwise.
+     * @return                  Always return true.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("start")) {
@@ -59,9 +60,7 @@ public class startApp extends CordovaPlugin {
         return true;
     }
 
-    //--------------------------------------------------------------------------
-    // LOCAL METHODS
-    //--------------------------------------------------------------------------
+
     /**
      * startApp
      */
@@ -79,12 +78,40 @@ public class startApp extends CordovaPlugin {
 		int i;
 		
 		try {
-			
-			
 			if (args.get(0) instanceof JSONObject) {
 				params = args.getJSONObject(0);
+			
+				/**
+				 * disable parsing intent values
+				 */
+				if(params.has("no_parse")) {
+					NO_PARSE_INTENT_VALS = true;
+				}
 				
-        			LaunchIntent = new Intent();
+				/**
+				 * set application
+				 * http://developer.android.com/reference/android/content/Intent.html(java.lang.String)
+				 */
+				if(params.has("application")) {
+					PackageManager manager = cordova.getActivity().getApplicationContext().getPackageManager();
+					LaunchIntent = manager.getLaunchIntentForPackage(params.getString("application"));
+						
+					if (LaunchIntent == null) {
+						callback.error("Application \""+ params.getString("application") +"\" not found!");
+						return;
+					}
+				}
+				/**
+				 * set application
+				 * http://developer.android.com/reference/android/content/Intent.html (java.lang.String)
+				 */
+				else if(params.has("intent")) {
+					LaunchIntent = new Intent(params.getString("intent"));
+				}
+				else {
+					LaunchIntent = new Intent();
+				}
+        		
 
 				/**
 				 * set package
@@ -302,14 +329,13 @@ public class startApp extends CordovaPlugin {
 	}
 	
 	/**
-	 * static functions
+	 * functions
 	 */
-	static String parseExtraName(String extraName) {
+	private String parseExtraName(String extraName) {
 		String parseIntentExtra = extraName;
 		
 		try {
 			parseIntentExtra = getIntentValueString(extraName);
-			Log.i(TAG, parseIntentExtra);
 		}
 		catch(NoSuchFieldException e) {
 			parseIntentExtra = extraName;	
@@ -324,14 +350,19 @@ public class startApp extends CordovaPlugin {
 		return parseIntentExtra;
 	}
 	
-	static String getIntentValueString(String flag) throws NoSuchFieldException, IllegalAccessException {
+	private String getIntentValueString(String flag) throws NoSuchFieldException, IllegalAccessException {
+		
+		if(NO_PARSE_INTENT_VALS) {
+			return flag;
+		}
+		
 		Field field = Intent.class.getDeclaredField(flag);
 		field.setAccessible(true);
 
 		return (String) field.get(null);
 	}
 	
-	static int getIntentValue(String flag) throws NoSuchFieldException, IllegalAccessException {
+	private int getIntentValue(String flag) throws NoSuchFieldException, IllegalAccessException {
 		Field field = Intent.class.getDeclaredField(flag);
 		field.setAccessible(true);
 		

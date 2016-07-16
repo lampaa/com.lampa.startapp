@@ -25,6 +25,9 @@ var sApp = startApp.set({} params [, {} extras]);
 ```
 | Param | Description | Default | Values |
 | --- | --- | --- | --- |
+| intent | [Intent(String action)](https://developer.android.com/reference/android/content/Intent.html#Intent%28java.lang.String%29)) | null | String |
+| application | [Intent (Context packageContext)](https://developer.android.com/reference/android/content/Intent.html#Intent%28android.content.Context,%20java.lang.Class%3C?%3E%29) | null | String |
+| action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String |
 | action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String |
 | category | [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) | null | String |
 | type | [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String))  | null | String |
@@ -120,8 +123,16 @@ Variable ```field``` is a String.
 _Set application as only package name_:
 ```js
 var sApp = startApp.set({
-	"package":"com.application.name"
+	"application":"com.application.name"
 });
+```
+
+_Set application as intent value and flag ([issue](https://github.com/lampaa/com.lampa.startapp/issues/50))_:
+```js
+var sApp = startApp.set({
+	"intent": "com.shazam.android.intent.actions.START_TAGGING",
+	"flags": ["FLAG_ACTIVITY_NEW_TASK"]
+}); 
 ```
 
 _Set application as package and activity_:
