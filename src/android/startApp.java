@@ -259,7 +259,7 @@ public class startApp extends CordovaPlugin {
                     }
                 }
                 
-                this.callbackContext.success(extraValue);
+                this.callbackContext.success(info);
             } else {
                 this.callbackContext.error("Cancelled");
             }
