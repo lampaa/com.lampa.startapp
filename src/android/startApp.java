@@ -34,6 +34,12 @@ public class startApp extends CordovaPlugin {
     
 	private boolean NO_PARSE_INTENT_VALS = false;
     public CallbackContext callbackContext;
+    
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        // Set up the activity result callback to this class for the startWithResult callback scenario
+        cordova.setActivityResultCallback(this);
+        super.initialize(cordova, webView);
+    }
 
     /**
      * Executes the request and returns PluginResult.
