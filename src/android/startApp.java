@@ -7,8 +7,6 @@
 */
 package com.lampa.startapp;
 
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
@@ -36,12 +34,6 @@ public class startApp extends CordovaPlugin {
     
 	private boolean NO_PARSE_INTENT_VALS = false;
     public CallbackContext callbackContext;
-    
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-        // Set up the activity result callback to this class for the startWithResult callback scenario
-        cordova.setActivityResultCallback(this);
-        super.initialize(cordova, webView);
-    }
 
     /**
      * Executes the request and returns PluginResult.
@@ -211,6 +203,8 @@ public class startApp extends CordovaPlugin {
 				 * launch intent
 				 */
 				if(params.has("intentstart") && "startActivityForResult".equals(params.getString("intentstart"))) {
+                    // Set up the activity result callback to this class
+                    cordova.setActivityResultCallback(this);
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
                 else
