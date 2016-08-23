@@ -30,7 +30,9 @@ public class startApp extends CordovaPlugin {
 
 	public static final String TAG = "startApp";
     public startApp() { }
+    
 	private boolean NO_PARSE_INTENT_VALS = false;
+    public CallbackContext callbackContext;
 
     /**
      * Executes the request and returns PluginResult.
@@ -41,20 +43,22 @@ public class startApp extends CordovaPlugin {
      * @return                  Always return true.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        this.callbackContext = callbackContext;
+        
         if (action.equals("start")) {
             this.start(args, callbackContext);
         }
-	else if(action.equals("go")) {
+        else if(action.equals("go")) {
             this.start(args, callbackContext);
         }
         else if(action.equals("check")) {
-                this.check(args, callbackContext);
+            this.check(args, callbackContext);
         }
         else if(action.equals("getExtras")) {
-                this.getExtras(callbackContext);
+            this.getExtras(callbackContext);
         }
         else if(action.equals("getExtra")) {
-                this.getExtra(args, callbackContext);
+            this.getExtra(args, callbackContext);
         }
 
         return true;
@@ -200,14 +204,16 @@ public class startApp extends CordovaPlugin {
 				if(params.has("intentstart") && "startActivityForResult".equals(params.getString("intentstart"))) {
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
-				if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
-					cordova.getActivity().sendBroadcast(LaunchIntent);	
-				}
-				else {
-					cordova.getActivity().startActivity(LaunchIntent);	
-				}
-				
-				callback.success();
+                else
+                {
+                    if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
+                        cordova.getActivity().sendBroadcast(LaunchIntent);	
+                    }
+                    else {
+                        cordova.getActivity().startActivity(LaunchIntent);	
+                    }
+                    callback.success();
+                }
 			}
 			else {
 				callback.error("Incorrect params, array is not array object!");
@@ -229,6 +235,25 @@ public class startApp extends CordovaPlugin {
 			callback.error("ActivityNotFoundException: " + e.getMessage());
 			e.printStackTrace();
 		}
+    }
+
+   /**
+     * For start to be able to return results to our app from the intent we need to wait 
+     * for the result to return. Then only call the callback with our result data.
+     */	 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            if (resultCode == Activity.RESULT_OK) {
+                this.callbackContext.success();
+            } else {
+                this.callbackContext.error("Cancelled");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
