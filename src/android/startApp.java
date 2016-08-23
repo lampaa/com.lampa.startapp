@@ -250,7 +250,16 @@ public class startApp extends CordovaPlugin {
 
         try {
             if (resultCode == Activity.RESULT_OK) {
-                this.callbackContext.success();
+                Bundle extras = data.getExtras();
+                JSONObject info = new JSONObject();
+                
+                if (extras != null) {
+                    for (String key : extras.keySet()) {
+                        info.put(key, extras.get(key).toString());
+                    }
+                }
+                
+                this.callbackContext.success(extraValue);
             } else {
                 this.callbackContext.error("Cancelled");
             }
