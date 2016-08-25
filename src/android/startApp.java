@@ -14,18 +14,24 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+
+import java.io.Serializable;
 import java.util.Iterator;
 import android.net.Uri;
 import java.lang.reflect.Field;
 import android.content.ActivityNotFoundException;
 import android.util.Log;
 import android.os.Bundle;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class startApp extends CordovaPlugin {
 
@@ -78,8 +84,7 @@ public class startApp extends CordovaPlugin {
 		JSONObject extra;
 		JSONObject key_value;
 		String key;
-		String value;
-		
+
 		int i;
 		
 		try {
@@ -190,12 +195,19 @@ public class startApp extends CordovaPlugin {
 				if(!args.isNull(1)) {
 					extra = args.getJSONObject(1);
 					Iterator<String> iter = extra.keys();
-							
+
 					while (iter.hasNext()) {
 						key = iter.next();
-						
-						value = extra.getString(key);
-						LaunchIntent.putExtra(parseExtraName(key), value);
+
+						JSONObject obj = extra.optJSONObject(key);
+						if(obj != null) {
+							LaunchIntent.putExtra(parseExtraName(key), toMap(obj));
+						}
+						else {
+							String value = extra.getString(key);
+							LaunchIntent.putExtra(parseExtraName(key), value);
+						}
+
 					}
 				}
 
@@ -404,5 +416,52 @@ public class startApp extends CordovaPlugin {
 		field.setAccessible(true);
 		
 		return field.getInt(null);
+	}
+
+	/** JSON and Intent parsing helpers **/
+
+	public static HashMap<String, Object> jsonToMap(JSONObject json) throws JSONException {
+		HashMap<String, Object> retMap = new HashMap<String, Object>();
+
+		if(json != JSONObject.NULL) {
+			retMap = toMap(json);
+		}
+		return retMap;
+	}
+
+	public static HashMap<String, Object> toMap(JSONObject object) throws JSONException {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		Iterator<String> keysItr = object.keys();
+		while(keysItr.hasNext()) {
+			String key = keysItr.next();
+			Object value = object.get(key);
+
+			if(value instanceof JSONArray) {
+				value = toList((JSONArray) value);
+			}
+
+			else if(value instanceof JSONObject) {
+				value = toMap((JSONObject) value);
+			}
+			map.put(key, value);
+		}
+		return map;
+	}
+
+	public static List<Object> toList(JSONArray array) throws JSONException {
+		List<Object> list = new ArrayList<Object>();
+		for(int i = 0; i < array.length(); i++) {
+			Object value = array.get(i);
+			if(value instanceof JSONArray) {
+				value = toList((JSONArray) value);
+			}
+
+			else if(value instanceof JSONObject) {
+				value = toMap((JSONObject) value);
+			}
+			list.add(value);
+		}
+		return list;
 	}
 }
