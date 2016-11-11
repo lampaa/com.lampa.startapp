@@ -10,7 +10,7 @@ Add to ```/my-app/platforms/android/assets/www/cordova_plugins.js```:
 ```javascript
 {
 	"file": "plugins/com.lampa.startapp/www/startApp.manually.js",
-	"id": "com.lampa.startapp",
+	"id": "com.lampa.startapp.startapp",
 	"merges": [
 		"startApp"
 	]
