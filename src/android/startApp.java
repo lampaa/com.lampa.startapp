@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
@@ -29,6 +30,7 @@ import android.os.Bundle;
 public class startApp extends CordovaPlugin {
 
 	public static final String TAG = "startApp";
+	private CallbackContext callback;
     public startApp() { }
 	private boolean NO_PARSE_INTENT_VALS = false;
 
@@ -198,16 +200,18 @@ public class startApp extends CordovaPlugin {
 				 * launch intent
 				 */
 				if(params.has("intentstart") && "startActivityForResult".equals(params.getString("intentstart"))) {
+					this.callback = callback;
+					cordova.setActivityResultCallback(this);
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
-				if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
-					cordova.getActivity().sendBroadcast(LaunchIntent);	
+				else if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
+					cordova.getActivity().sendBroadcast(LaunchIntent);
+					callback.success();
 				}
 				else {
-					cordova.getActivity().startActivity(LaunchIntent);	
+					cordova.getActivity().startActivity(LaunchIntent);
+					callback.success();
 				}
-				
-				callback.success();
 			}
 			else {
 				callback.error("Incorrect params, array is not array object!");
@@ -230,6 +234,30 @@ public class startApp extends CordovaPlugin {
 			e.printStackTrace();
 		}
     }
+
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		webView.loadUrl("javascript:console.log('onActivityResult requestCode:" + requestCode + ", resultCode:" + resultCode + "');");
+		try {
+			JSONObject extras = new JSONObject();
+			extras.put("requestCode", requestCode);
+			extras.put("resultCode", resultCode);
+			if (intent != null) {
+				Bundle bundle = intent.getExtras();
+				if (bundle != null) {
+					for (String key : bundle.keySet()) {
+						extras.put(key, bundle.get(key));
+					}
+				}
+				Uri uri = intent.getData();
+				if (uri != null) {
+					extras.put("uri", uri.toString());
+				}
+			}
+			this.callback.success(extras);
+		} catch (JSONException e) {
+			this.callback.error(e.getMessage());
+		}
+	}
 
     /**
      * checkApp
