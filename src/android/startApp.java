@@ -13,6 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import android.util.Base64;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +35,8 @@ import android.os.Bundle;
 public class startApp extends CordovaPlugin {
 
 	public static final String TAG = "startApp";
-	private CallbackContext callback;
+	private CallbackContext callback = null;
+	private JSONObject params = null;
     public startApp() { }
 	private boolean NO_PARSE_INTENT_VALS = false;
 
@@ -68,7 +74,6 @@ public class startApp extends CordovaPlugin {
      */
     public void start(JSONArray args, CallbackContext callback) {
 		Intent LaunchIntent;
-		JSONObject params;
 		JSONArray flags;
 		JSONArray component;
 		
@@ -252,11 +257,31 @@ public class startApp extends CordovaPlugin {
 				if (uri != null) {
 					extras.put("uri", uri.toString());
 				}
+				if (params.has("uri") && "data".equals(params.getString("uri"))) {
+					String uriPath = (String) extras.get("result"); // TODO uri.getPath();
+					File file = new File(uriPath);
+					String base64 = encodeFileToBase64Binary(file);
+					extras.put("uri", base64);
+				}
 			}
 			this.callback.success(extras);
 		} catch (JSONException e) {
 			this.callback.error(e.getMessage());
 		}
+	}
+
+	private String encodeFileToBase64Binary(File file) {
+		int size = (int) file.length();
+		byte[] bytes = new byte[size];
+		try {
+			BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+			buf.read(bytes, 0, bytes.length);
+			buf.close();
+			return Base64.encodeToString(bytes, Base64.DEFAULT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
     /**
