@@ -80,7 +80,6 @@ public class startApp extends CordovaPlugin {
 		JSONObject extra;
 		JSONObject key_value;
 		String key;
-		Object value;
 		
 		int i;
 		
@@ -196,8 +195,16 @@ public class startApp extends CordovaPlugin {
 					while (iter.hasNext()) {
 						key = iter.next();
 						
-						value = extra.get(key);
-						LaunchIntent.putExtra(parseExtraName(key), value);
+						Object value = extra.get(key);
+						if (value != null) {
+							String keyStr = parseExtraName(key);
+							if (value instanceof Number)
+								LaunchIntent.putExtra(keyStr, (Number) value);
+							else if (value instanceof Boolean)
+								LaunchIntent.putExtra(keyStr, (Boolean) value);
+							else
+								LaunchIntent.putExtra(keyStr, (String) value);
+						}
 					}
 				}
 
