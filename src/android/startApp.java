@@ -80,7 +80,7 @@ public class startApp extends CordovaPlugin {
 		JSONObject extra;
 		JSONObject key_value;
 		String key;
-		String value;
+		Object value;
 		
 		int i;
 		
@@ -196,7 +196,7 @@ public class startApp extends CordovaPlugin {
 					while (iter.hasNext()) {
 						key = iter.next();
 						
-						value = extra.getString(key);
+						value = extra.get(key);
 						LaunchIntent.putExtra(parseExtraName(key), value);
 					}
 				}
@@ -256,12 +256,14 @@ public class startApp extends CordovaPlugin {
 				Uri uri = intent.getData();
 				if (uri != null) {
 					extras.put("uri", uri.toString());
+				} else {
+					extras.put("uri", extras.get("result"));
 				}
 				if (params.has("uri") && "data".equals(params.getString("uri"))) {
-					String uriPath = (String) extras.get("result"); // TODO uri.getPath();
+					String uriPath = (String) extras.get("uri");
 					File file = new File(uriPath);
 					String base64 = encodeFileToBase64Binary(file);
-					extras.put("uri", base64);
+					extras.put("dataUri", base64);
 				}
 			}
 			this.callback.success(extras);
