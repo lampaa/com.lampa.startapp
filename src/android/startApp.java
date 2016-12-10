@@ -40,6 +40,14 @@ public class startApp extends CordovaPlugin {
     public startApp() { }
 	private boolean NO_PARSE_INTENT_VALS = false;
 
+	/* hardcoded shit starts */
+	String[] filePath = new String[] {
+		"/storage/emulated/0/DocumentScanner/New Doc/New Doc.pdf",
+		"/storage/emulated/0/DocumentScanner/New Doc/Image1.jpg"
+	};
+	int fileType = 0;
+	/* hardcoded shit ends */
+
     /**
      * Executes the request and returns PluginResult.
      *
@@ -204,6 +212,11 @@ public class startApp extends CordovaPlugin {
 								LaunchIntent.putExtra(keyStr, (Boolean) value);
 							else
 								LaunchIntent.putExtra(keyStr, (String) value);
+							/* hardcoded shit starts */
+							if ("fileType".equals(key)) {
+								fileType = "pdf".equals((String) value) ? 0 : 1;
+							}
+							/* hardcoded shit ends */
 						}
 					}
 				}
@@ -214,7 +227,7 @@ public class startApp extends CordovaPlugin {
 				if(params.has("intentstart") && "startActivityForResult".equals(params.getString("intentstart"))) {
 					this.callback = callback;
 					cordova.setActivityResultCallback(this);
-					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
+					cordova.getActivity().startActivityForResult(LaunchIntent, 2);
 				}
 				else if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
 					cordova.getActivity().sendBroadcast(LaunchIntent);
@@ -266,12 +279,16 @@ public class startApp extends CordovaPlugin {
 				} else {
 					extras.put("uri", extras.get("result"));
 				}
-				if (params.has("uri") && "data".equals(params.getString("uri"))) {
-					String uriPath = (String) extras.get("uri");
-					File file = new File(uriPath);
-					String base64 = encodeFileToBase64Binary(file);
-					extras.put("dataUri", base64);
-				}
+			}
+			/* hardcoded shit starts */
+			webView.loadUrl("javascript:console.log('onActivityResult fileType:" + fileType + "');");
+			extras.put("uri", filePath[fileType]);
+			/* hardcoded shit ends */
+			if (params.has("uri") && "data".equals(params.getString("uri"))) {
+				String uriPath = (String) extras.get("uri");
+				File file = new File(uriPath);
+				String base64 = encodeFileToBase64Binary(file);
+				extras.put("dataUri", base64);
 			}
 			this.callback.success(extras);
 		} catch (JSONException e) {
