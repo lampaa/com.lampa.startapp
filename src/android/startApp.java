@@ -375,7 +375,7 @@ public class startApp extends CordovaPlugin {
 	private int getIntentValue(String flag) throws NoSuchFieldException, IllegalAccessException {
 		Field field = Intent.class.getDeclaredField(flag);
 		field.setAccessible(true);
-		
+
 		return field.getInt(null);
 	}
 
@@ -392,40 +392,40 @@ public class startApp extends CordovaPlugin {
 	@Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 
-				if (resultCode ==  cordova.getActivity().RESULT_OK) Log.d(TAG, "RESULT_OK");
-				else if (resultCode ==  cordova.getActivity().RESULT_CANCELED) Log.d(TAG, "RESULT_CANCELED");
+			if (resultCode ==  cordova.getActivity().RESULT_OK) Log.d(TAG, "RESULT_OK");
+			else if (resultCode ==  cordova.getActivity().RESULT_CANCELED) Log.d(TAG, "RESULT_CANCELED");
 
-				if (data == null) {
-				    Log.d(TAG, "Intent result null");
-				    return;
-				}
+			if (data == null) {
+				Log.d(TAG, "Intent result null");
+				return;
+			}
 
-				Bundle result = data.getExtras();
+			Bundle result = data.getExtras();
 
-				if (result == null) {
-				    Log.d(TAG, "Bundle result null");
-				    return;
-				}
+			if (result == null) {
+				Log.d(TAG, "Bundle result null");
+				return;
+			}
 
-				Iterator iterator = data.getExtras().keySet().iterator();
+			Iterator iterator = data.getExtras().keySet().iterator();
 
-				try {
+			try {
 
-					JSONObject info = new JSONObject();
-					while (iterator.hasNext()) {
+				JSONObject info = new JSONObject();
+				while (iterator.hasNext()) {
 
-					    String key = iterator.next().toString();
+				String key = iterator.next().toString();
 
-					    Object value = result.get(key);
+				Object value = result.get(key);
 
-					    Log.d(TAG, String.format("%s : %s", key, value));
-							info.put(key, value);
-					}
-					this.callbackContext.success(info);
-				} catch(JSONException e) {
-					this.callbackContext.error(e.getMessage());
-					e.printStackTrace();
-				}
+				Log.d(TAG, String.format("%s : %s", key, value));
+				info.put(key, value);
+			}
+				this.callbackContext.success(info);
+			} catch(JSONException e) {
+				this.callbackContext.error(e.getMessage());
+				e.printStackTrace();
+			}
     }
 
 }
