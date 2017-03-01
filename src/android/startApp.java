@@ -31,44 +31,44 @@ public class startApp extends CordovaPlugin {
 
 	public static final String TAG = "startApp";
 	private CallbackContext callbackContext;
-  public startApp() { }
+	public startApp() { }
 	private boolean NO_PARSE_INTENT_VALS = false;
 
-    /**
-     * Executes the request and returns PluginResult.
-     *
-     * @param action            The action to execute.
-     * @param args              JSONArray of arguments for the plugin.
-     * @param callbackContext   The callback context used when calling back into JavaScript.
-     * @return                  Always return true.
-     */
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-			this.callbackContext = callbackContext;
+	/**
+	* Executes the request and returns PluginResult.
+	*
+	* @param action            The action to execute.
+	* @param args              JSONArray of arguments for the plugin.
+	* @param callbackContext   The callback context used when calling back into JavaScript.
+	* @return                  Always return true.
+	*/
+	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+		this.callbackContext = callbackContext;
 
-        if (action.equals("start")) {
-            this.start(args, callbackContext);
-        }
-	else if(action.equals("go")) {
-            this.start(args, callbackContext);
-        }
-        else if(action.equals("check")) {
-                this.check(args, callbackContext);
-        }
-        else if(action.equals("getExtras")) {
-                this.getExtras(callbackContext);
-        }
-        else if(action.equals("getExtra")) {
-                this.getExtra(args, callbackContext);
-        }
+		if (action.equals("start")) {
+			this.start(args, callbackContext);
+		}
+		else if(action.equals("go")) {
+			this.start(args, callbackContext);
+		}
+		else if(action.equals("check")) {
+			this.check(args, callbackContext);
+		}
+		else if(action.equals("getExtras")) {
+			this.getExtras(callbackContext);
+		}
+		else if(action.equals("getExtra")) {
+			this.getExtra(args, callbackContext);
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 
-    /**
-     * startApp
-     */
-    public void start(JSONArray args, CallbackContext callback) {
+	/**
+	* startApp
+	*/
+	public void start(JSONArray args, CallbackContext callback) {
 		Intent LaunchIntent;
 		JSONObject params;
 		JSONArray flags;
@@ -239,11 +239,11 @@ public class startApp extends CordovaPlugin {
 			callback.error("ActivityNotFoundException: " + e.getMessage());
 			e.printStackTrace();
 		}
-    }
+	}
 
-    /**
-     * checkApp
-    */
+	/**
+	* checkApp
+	*/
 	public void check(JSONArray args, CallbackContext callback) {
 		JSONObject params;
 
@@ -390,42 +390,42 @@ public class startApp extends CordovaPlugin {
 
 
 	@Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 
-			if (resultCode ==  cordova.getActivity().RESULT_OK) Log.d(TAG, "RESULT_OK");
-			else if (resultCode ==  cordova.getActivity().RESULT_CANCELED) Log.d(TAG, "RESULT_CANCELED");
+		if (resultCode ==  cordova.getActivity().RESULT_OK) Log.d(TAG, "RESULT_OK");
+		else if (resultCode ==  cordova.getActivity().RESULT_CANCELED) Log.d(TAG, "RESULT_CANCELED");
 
-			if (data == null) {
-				Log.d(TAG, "Intent result null");
-				return;
-			}
+		if (data == null) {
+			Log.d(TAG, "Intent result null");
+			return;
+		}
 
-			Bundle result = data.getExtras();
+		Bundle result = data.getExtras();
 
-			if (result == null) {
-				Log.d(TAG, "Bundle result null");
-				return;
-			}
+		if (result == null) {
+			Log.d(TAG, "Bundle result null");
+			return;
+		}
 
-			Iterator iterator = data.getExtras().keySet().iterator();
+		Iterator iterator = data.getExtras().keySet().iterator();
 
-			try {
+		try {
 
-				JSONObject info = new JSONObject();
-				while (iterator.hasNext()) {
+			JSONObject info = new JSONObject();
+			while (iterator.hasNext()) {
 
-				String key = iterator.next().toString();
+			String key = iterator.next().toString();
 
-				Object value = result.get(key);
+			Object value = result.get(key);
 
-				Log.d(TAG, String.format("%s : %s", key, value));
-				info.put(key, value);
-			}
-				this.callbackContext.success(info);
-			} catch(JSONException e) {
-				this.callbackContext.error(e.getMessage());
-				e.printStackTrace();
-			}
-    }
+			Log.d(TAG, String.format("%s : %s", key, value));
+			info.put(key, value);
+		}
+			this.callbackContext.success(info);
+		} catch(JSONException e) {
+			this.callbackContext.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
 }
