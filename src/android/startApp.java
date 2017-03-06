@@ -41,6 +41,7 @@ public class startApp extends CordovaPlugin {
 	private boolean NO_PARSE_INTENT_VALS = false;
 
 	/* hardcoded shit starts */
+	String docScannerFilePath = "/storage/emulated/0/DocumentScanner";
 	String[] filePath = new String[] {
 		"/storage/emulated/0/DocumentScanner/New Doc/New Doc.pdf",
 		"/storage/emulated/0/DocumentScanner/New Doc/Image1.jpg"
@@ -260,6 +261,48 @@ public class startApp extends CordovaPlugin {
 		}
     }
 
+	public static File lastModifiedDirectory(File dir) {
+		File[] files = dir.listFiles(new java.io.FileFilter() {
+			public boolean accept(File file) {
+				return file.isDirectory();
+			}
+		});
+		long lastMod = Long.MIN_VALUE;
+		File choice = null;
+		for (File file : files) {
+			if (file.lastModified() > lastMod) {
+				choice = file;
+				lastMod = file.lastModified();
+			}
+		}
+		return choice;
+	}
+
+	public static File lastModifiedFile(File dir) {
+		File[] files = dir.listFiles(new java.io.FileFilter() {
+			public boolean accept(File file) {
+				return file.isFile();
+			}
+		});
+		long lastMod = Long.MIN_VALUE;
+		File choice = null;
+		for (File file : files) {
+			if (file.lastModified() > lastMod) {
+				choice = file;
+				lastMod = file.lastModified();
+			}
+		}
+		return choice;
+	}
+
+	public static File lastModifiedDirectory(String dir) {
+		return lastModifiedDirectory(new File(dir));
+	}
+
+	public static File lastModifiedFile(String dir) {
+		return lastModifiedFile(new File(dir));
+	}
+
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		webView.loadUrl("javascript:console.log('onActivityResult requestCode:" + requestCode + ", resultCode:" + resultCode + "');");
 		try {
@@ -282,7 +325,9 @@ public class startApp extends CordovaPlugin {
 			}
 			/* hardcoded shit starts */
 			webView.loadUrl("javascript:console.log('onActivityResult fileType:" + fileType + "');");
-			extras.put("uri", filePath[fileType]);
+			String lastModifiedFilePath = lastModifiedFile(lastModifiedDirectory(docScannerFilePath)).getAbsolutePath();
+			webView.loadUrl("javascript:console.log('onActivityResult lastModifiedFilePath:" + lastModifiedFilePath + "');");
+			extras.put("uri", lastModifiedFilePath);
 			/* hardcoded shit ends */
 			if (params.has("uri") && "data".equals(params.getString("uri"))) {
 				String uriPath = (String) extras.get("uri");
