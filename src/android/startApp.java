@@ -40,7 +40,7 @@ public class startApp extends CordovaPlugin {
     public startApp() { }
 	private boolean NO_PARSE_INTENT_VALS = false;
 
-	/* hardcoded shit starts */
+	/* hardcoded shit starts * /
 	String docScannerFilePath = "/storage/emulated/0/DocumentScanner";
 	String[] filePath = new String[] {
 		"/storage/emulated/0/DocumentScanner/New Doc/New Doc.pdf",
@@ -213,7 +213,7 @@ public class startApp extends CordovaPlugin {
 								LaunchIntent.putExtra(keyStr, (Boolean) value);
 							else
 								LaunchIntent.putExtra(keyStr, (String) value);
-							/* hardcoded shit starts */
+							/* hardcoded shit starts * /
 							if ("fileType".equals(key)) {
 								fileType = "pdf".equals((String) value) ? 0 : 1;
 							}
@@ -310,20 +310,26 @@ public class startApp extends CordovaPlugin {
 			extras.put("requestCode", requestCode);
 			extras.put("resultCode", resultCode);
 			if (intent != null) {
+				webView.loadUrl("javascript:console.log('intent not null');");
 				Bundle bundle = intent.getExtras();
 				if (bundle != null) {
+					webView.loadUrl("javascript:console.log('bundle not null');");
 					for (String key : bundle.keySet()) {
+						webView.loadUrl("javascript:console.log('key: "+key+"');");
+						webView.loadUrl("javascript:console.log('value: "+bundle.get(key)+"');");
 						extras.put(key, bundle.get(key));
 					}
 				}
 				Uri uri = intent.getData();
 				if (uri != null) {
+					webView.loadUrl("javascript:console.log('uri = intent.getData(): "+uri.toString()+"');");
 					extras.put("uri", uri.toString());
 				} else {
-					extras.put("uri", extras.get("result"));
+					webView.loadUrl("javascript:console.log('uri = extras.get(filePath): "+extras.get("filePath")+"');");
+					extras.put("uri", extras.get("filePath"));
 				}
 			}
-			/* hardcoded shit starts */
+			/* hardcoded shit starts * /
 			webView.loadUrl("javascript:console.log('onActivityResult fileType:" + fileType + "');");
 			String lastModifiedFilePath = lastModifiedFile(lastModifiedDirectory(docScannerFilePath)).getAbsolutePath();
 			webView.loadUrl("javascript:console.log('onActivityResult lastModifiedFilePath:" + lastModifiedFilePath + "');");
