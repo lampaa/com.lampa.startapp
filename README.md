@@ -32,7 +32,7 @@ var sApp = startApp.set({} params [, {} extras]);
 | category | [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) | null | String |
 | type | [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String))  | null | String |
 | package | [Intent setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) | null | String |
-| uri | [Intent Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String, android.net.Uri)) | null | String |
+| uri | [Intent Uri](http://developer.android.com/intl/ru/reference/android/content/Intent.html#Intent(java.lang.String,android.net.Uri)) | null | String |
 | flags | [Intent setFlags](http://developer.android.com/reference/android/content/Intent.html#setFlags(int)) | null | String |
 | component | [Intent setComponent](http://developer.android.com/reference/android/content/Intent.html#setComponent(android.content.ComponentName)) | null |  String |
 | intentstart | set type of start intent  | startActivity | startActivity, startActivityForResult, sendBroadcast |
