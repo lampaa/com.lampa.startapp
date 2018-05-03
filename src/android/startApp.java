@@ -13,16 +13,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Iterator;
 import android.net.Uri;
 import java.lang.reflect.Field;
 import android.content.ActivityNotFoundException;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.os.Bundle;
 
@@ -152,7 +157,22 @@ public class startApp extends CordovaPlugin {
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setData%28android.net.Uri%29
 				 */
 				if(params.has("uri")) {
-					LaunchIntent.setData(Uri.parse(params.getString("uri")));
+					String uri_str = params.getString("uri");
+					Uri uri = null;
+					if (uri_str.startsWith("file://")){
+						// android N surport
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+							LaunchIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+							try {
+								uri = FileProvider.getUriForFile(this.cordova.getContext(), "com.lampa.startapp.fileProvider", new File(new URI(uri_str)));
+							} catch (URISyntaxException e) {
+								e.printStackTrace();
+							}
+						}
+					}else{
+						uri = Uri.parse(uri_str);
+					}
+					LaunchIntent.setData(uri);
 				}
 				
 				/**
