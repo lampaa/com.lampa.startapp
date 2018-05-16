@@ -138,7 +138,7 @@ public class startApp extends Assets {
 				/**
 				 * disable parsing intent values
 				 */
-				if(params.has("noParseAction")) {
+				if(params.has("noParse")) {
 					NO_PARSE_INTENT_VALS = true;
 				}
 				
