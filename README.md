@@ -3,6 +3,13 @@
 
 Phonegap plugin for check or launch other application, get extras in phonegap app.
 
+
+Last version 6.1.0
+*  Add full support activityForResult, sendBroadcast and RegisterReceiver.
+*  Add types of extras.
+
+# Install
+
 > Install: ```cordova plugin add com.lampa.startapp```
 > 
 > Install: ```cordova plugin add https://github.com/lampaa/com.lampa.startapp.git```
@@ -25,10 +32,10 @@ var sApp = startApp.set({} params [, {} extras]);
 ```
 | Param | Description | Default | Values |
 | --- | --- | --- | --- |
+| noParse | Find action and category in Intent package | false | Boolean |
 | intent | [Intent(String action)](https://developer.android.com/reference/android/content/Intent.html#Intent%28java.lang.String%29)) | null | String |
 | application | [Intent (Context packageContext)](https://developer.android.com/reference/android/content/Intent.html#Intent%28android.content.Context,%20java.lang.Class%3C?%3E%29) | null | String |
-| action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String |
-| action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String |
+| action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String ||
 | category | [Intent addCategory](http://developer.android.com/reference/android/content/Intent.html#addCategory(java.lang.String)) | null | String |
 | type | [Intent setType](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType(java.lang.String))  | null | String |
 | package | [Intent setPackage](http://developer.android.com/intl/ru/reference/android/content/Intent.html#setPackage(java.lang.String)) | null | String |
@@ -38,10 +45,12 @@ var sApp = startApp.set({} params [, {} extras]);
 | intentstart | set type of start intent  | startActivity | startActivity, startActivityForResult, sendBroadcast |
 
 Extras as a set of key-value:
-```javascript
+```js
 {
-	"key1":"value1",
-    "key2":"value2"
+    "key1": "value1", // String
+    "key2": "value2", // String
+    "key3": 100, // Integer,
+    "key4": true // Boolean
 }
 ```
 
@@ -59,7 +68,7 @@ var sApp = startApp.set({ /* params */
 	"intentstart":"startActivity",
 }, { /* extras */
 	"EXTRA_STREAM":"extraValue1",
-	"extraKey2":"extraValue2"
+	"extraKey2":100500
 });
 ```
 
@@ -69,6 +78,8 @@ sApp.start(function() { /* success */
 	console.log("OK");
 }, function(error) { /* fail */
 	alert(error);
+}, function() { // optional broadcast and forResult callback
+	console.log(arguments);
 });
 ```
 or
@@ -92,8 +103,8 @@ startApp.extraFields(function(fields) { /* success */
 Variable ```fields``` contains object array, example:
 ```javascript
 {
-	"key1":"value1",
-    "key2":"value2"
+	"extraKey1":"extraValue1",
+	"extraKey2":"extraValue2"
 }
 ```
 
@@ -124,7 +135,7 @@ _Set application as only package name_:
 ```js
 var sApp = startApp.set({
 	"application":"com.application.name"
-});
+}).start();
 ```
 
 _Set application as intent value and flag ([issue](https://github.com/lampaa/com.lampa.startapp/issues/50))_:
@@ -132,14 +143,14 @@ _Set application as intent value and flag ([issue](https://github.com/lampaa/com
 var sApp = startApp.set({
 	"intent": "com.shazam.android.intent.actions.START_TAGGING",
 	"flags": ["FLAG_ACTIVITY_NEW_TASK"]
-}); 
+}).start();
 ```
 
 _Set application as package and activity_:
 ```js
 var sApp = startApp.set({
 	"component": ["com.app.name","com.app.name.Activity"]
-});
+}).start();
 ```
 
 _Set application as action, package, type and Uri_:
@@ -149,7 +160,7 @@ var sApp = startApp.set({ /* params */
 	"type":"text/css",
 	"package":"com.lampa.startapp",
 	"uri":"file://data/index.html"
-});
+}).start();
 ```
 
 
@@ -161,9 +172,58 @@ var sApp = startApp.set({ /* params */
 }, { /* extras */
 	"extraKey1":"extraValue1",
 	"extraKey2":"extraValue2"
+}).start();
+```
+
+_Start listening broadcast_
+
+```js
+var sApp = startApp.set(["RECEIVER_NAME"]);
+
+sApp.receiver(function(compete) { // if receiver is registered
+	$messages.prepend("<div>id broadcast: " + compete + "</div>");
+}, function(error) {
+	$messages.prepend("<div class='err'>" + error + "</div>");
+}, function(action, extras) { // receiver message
+	$messages.prepend("<div>" + action + ", " + JSON.stringify(extras)  + "</div>");
+});
+``````
+
+_Start application with result_
+
+```js
+var sApp = startApp.set({
+	"action":"ACTION_MAIN",
+	"package":"com.lampa.startapp",
+	"intentstart":"startActivityForResult",
+});
+
+sApp.start(function(compete) { // if receiver is registered
+	console.log(compete);
+}, function(error) {
+	console.error(error);
+}, function(result, requestCode, resultCode) { // result message
+	$messages.prepend("<div>" + JSON.stringify(result) + ", " + requestCode + ", " + resultCode + "</div>");
 });
 ```
 
+_Send broadcast_
+```js
+var sApp = startApp.set({ /* params */
+	"action":"RECEIVER_NAME",
+	"intentstart":"sendBroadcast",
+	"noParseAction": true // disable parse action value
+}, {
+	"extraKey1":"extraValue1",
+	"extraKey2":"extraValue2"
+});
+
+sApp.start(function(compete) {
+	console.log(compete);
+}, function(error) {
+	console.error(error);
+});
+```
 
 Example, call skype:
 ```js
@@ -239,7 +299,37 @@ startApp.set({ /* params */
 	"intentstart":"startActivityForResult"
 }).start();
 ```
+Example, open twitter:
+```js
+startApp.set({ /* params */
+	"application": "com.twitter.android"
+}).start();
+```
+Example, open twitter user:
+```js
+startApp.set({ /* params */
+	"action": "ACTION_VIEW", 
+	"uri": "https://twitter.com/kremlinrussia"
+}).start();
+```
 
+Example, add alarm to alarm manager: 
+```js
+var sApp = startApp.set({ /* params */
+    "action":"android.intent.action.SET_ALARM",
+    "noParseAction": true
+}, {
+    "android.intent.extra.alarm.MESSAGE":"New Alarm",
+    "android.intent.extra.alarm.HOUR":17,
+    "android.intent.extra.alarm.MINUTES": 30
+});
+
+sApp.start(function(success) {
+    console.log(success);
+}, function(error) {
+    console.error(success);
+});
+```
 
 Use **iOS**
 
@@ -276,5 +366,3 @@ Launching External Intents Works on Cordova.
 Android launch external activities.
 Android check app availability.
 Android launch application with parameters. 
-
-Prose
