@@ -1,5 +1,5 @@
 /**
-	com.lampa.startapp
+	com.lampa.startapp, ver. 6.1.0
 	https://github.com/lampaa/com.lampa.startapp
 	
 	Phonegap plugin for check or launch other application in android device (iOS support).
@@ -8,35 +8,27 @@
 package com.lampa.startapp;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ComponentName;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Iterator;
 import android.net.Uri;
-import java.lang.reflect.Field;
-import android.content.ActivityNotFoundException;
-import android.os.Build;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.os.Bundle;
 
-public class startApp extends CordovaPlugin {
-
-	public static final String TAG = "startApp";
-    public startApp() { }
-	private boolean NO_PARSE_INTENT_VALS = false;
-
+public class startApp extends Assets {
+	private HashMap<Integer, BroadcastReceiver> broadcastReceiverHashMap = new HashMap<>();
+	private CallbackContext callbackContext;
     /**
      * Executes the request and returns PluginResult.
      *
@@ -46,27 +38,86 @@ public class startApp extends CordovaPlugin {
      * @return                  Always return true.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("start")) {
-            this.start(args, callbackContext);
-        }
-	else if(action.equals("go")) {
-            this.start(args, callbackContext);
-        }
-        else if(action.equals("check")) {
-                this.check(args, callbackContext);
-        }
-        else if(action.equals("getExtras")) {
-                this.getExtras(callbackContext);
-        }
-        else if(action.equals("getExtra")) {
-                this.getExtra(args, callbackContext);
-        }
+		switch (action) {
+			case "start":
+				this.start(args, callbackContext);
+				break;
+			case "check":
+				this.check(args, callbackContext);
+				break;
+			case "receiver":
+				this.receiver(args, callbackContext);
+				break;
+			case "unReceiver":
+				this.receiver(args, callbackContext);
+				break;
+			case "getExtras":
+				this.getExtras(callbackContext);
+				break;
+			case "getExtra":
+				this.getExtra(args, callbackContext);
+				break;
+		}
 
         return true;
     }
 
 
-    /**
+	/**
+	 *
+	 * @param args
+	 * @param callback
+	 */
+	private void receiver(JSONArray args, CallbackContext callback) {
+		BroadcastReceiver receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				JSONObject result = new JSONObject();
+
+				try {
+					result.put("_ACTION_VALUE_FORMAT_", intent.getAction());
+
+					Bundle bundle = intent.getExtras();
+					if (bundle != null) {
+						for (String key : bundle.keySet()) {
+							result.put(key, bundle.get(key));
+						}
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+				pluginResult.setKeepCallback(true);
+
+				callback.sendPluginResult(pluginResult);
+			}
+		};
+
+		try {
+			JSONArray values = args.getJSONArray(0);
+			IntentFilter filter = new IntentFilter();
+
+			for(int i=0; i < values.length(); i++) {
+				filter.addAction(values.getString(i));
+			}
+
+			cordova.getContext().registerReceiver(receiver, filter);
+			broadcastReceiverHashMap.put(receiver.hashCode(), receiver);
+
+			PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, receiver.hashCode());
+			pluginResult.setKeepCallback(true);
+
+			callback.sendPluginResult(pluginResult);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			callback.error("Error register receiver: " + ex.getMessage());
+		}
+	}
+
+
+	/**
      * startApp
      */
     public void start(JSONArray args, CallbackContext callback) {
@@ -76,9 +127,7 @@ public class startApp extends CordovaPlugin {
 		JSONArray component;
 		
 		JSONObject extra;
-		JSONObject key_value;
 		String key;
-		String value;
 		
 		int i;
 		
@@ -89,7 +138,7 @@ public class startApp extends CordovaPlugin {
 				/**
 				 * disable parsing intent values
 				 */
-				if(params.has("no_parse")) {
+				if(params.has("noParseAction")) {
 					NO_PARSE_INTENT_VALS = true;
 				}
 				
@@ -106,8 +155,9 @@ public class startApp extends CordovaPlugin {
 						return;
 					}
 				}
+
 				/**
-				 * set application
+				 * set intent
 				 * http://developer.android.com/reference/android/content/Intent.html (java.lang.String)
 				 */
 				else if(params.has("intent")) {
@@ -157,22 +207,7 @@ public class startApp extends CordovaPlugin {
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setData%28android.net.Uri%29
 				 */
 				if(params.has("uri")) {
-					String uri_str = params.getString("uri");
-					Uri uri = null;
-					if (uri_str.startsWith("file://")){
-						// android N surport
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-							LaunchIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-							try {
-								uri = FileProvider.getUriForFile(this.cordova.getContext(), "com.lampa.startapp.fileProvider", new File(new URI(uri_str)));
-							} catch (URISyntaxException e) {
-								e.printStackTrace();
-							}
-						}
-					}else{
-						uri = Uri.parse(uri_str);
-					}
-					LaunchIntent.setData(uri);
+					LaunchIntent.setData(Uri.parse(params.getString("uri")));
 				}
 				
 				/**
@@ -208,16 +243,32 @@ public class startApp extends CordovaPlugin {
 							
 					while (iter.hasNext()) {
 						key = iter.next();
-						
-						value = extra.getString(key);
-						LaunchIntent.putExtra(parseExtraName(key), value);
+						Object value = extra.get(key);
+
+						if(value instanceof Integer) {
+							LaunchIntent.putExtra(parseExtraName(key), extra.getInt(key));
+						}
+
+						if(value instanceof String) {
+							LaunchIntent.putExtra(parseExtraName(key), extra.getString(key));
+						}
+
+						if(value instanceof Boolean) {
+							LaunchIntent.putExtra(parseExtraName(key), extra.getBoolean(key));
+						}
 					}
 				}
 
 				/**
 				 * launch intent
 				 */
+
+				PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
+				pluginResult.setKeepCallback(true);
+
 				if(params.has("intentstart") && "startActivityForResult".equals(params.getString("intentstart"))) {
+					cordova.setActivityResultCallback (this);
+					callbackContext = callback;
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
 				if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
@@ -227,34 +278,22 @@ public class startApp extends CordovaPlugin {
 					cordova.getActivity().startActivity(LaunchIntent);	
 				}
 				
-				callback.success();
+				callback.sendPluginResult(pluginResult);
 			}
 			else {
 				callback.error("Incorrect params, array is not array object!");
 			}
 		} 
-		catch (JSONException e) {
-			callback.error("JSONException: " + e.getMessage());
+		catch (Exception e) {
 			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			callback.error("IllegalAccessException: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (NoSuchFieldException e) {
-			callback.error("NoSuchFieldException: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (ActivityNotFoundException e) {
-			callback.error("ActivityNotFoundException: " + e.getMessage());
-			e.printStackTrace();
+			callback.error(e.getClass() + ": " + e.getMessage());
 		}
     }
 
     /**
      * checkApp
      */	 
-	public void check(JSONArray args, CallbackContext callback) {
+	private void check(JSONArray args, CallbackContext callback) {
 		JSONObject params;
 		
 		try {
@@ -265,20 +304,16 @@ public class startApp extends CordovaPlugin {
 				if(params.has("package")) {
 					PackageManager pm = cordova.getActivity().getApplicationContext().getPackageManager();
 					
-					/**
-					 * get package info
-					 */
+					// get package info
 					PackageInfo PackInfo = pm.getPackageInfo(params.getString("package"), PackageManager.GET_ACTIVITIES);
 						
-					/**
-					 * create json object
-					 */
-					JSONObject info = new JSONObject();
-						
-					info.put("versionName", PackInfo.versionName);
-					info.put("packageName", PackInfo.packageName);
-					info.put("versionCode", PackInfo.versionCode);
-					info.put("applicationInfo", PackInfo.applicationInfo);
+					// create json object
+					JSONObject info = new JSONObject() {{
+						put("versionName", PackInfo.versionName);
+						put("packageName", PackInfo.packageName);
+						put("versionCode", PackInfo.versionCode);
+						put("applicationInfo", PackInfo.applicationInfo);
+					}};
 						
 					callback.success(info);
 				}
@@ -289,12 +324,9 @@ public class startApp extends CordovaPlugin {
 			else {
 				callback.error("Incorrect params, array is not array object!");
 			}
-		} catch (JSONException e) {
-			callback.error("json: " + e.toString());
-			e.printStackTrace();
 		}
-		catch (NameNotFoundException e) {
-			callback.error("NameNotFoundException: " + e.toString());
+		catch (Exception e) {
+			callback.error(e.getClass() + ": " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -302,7 +334,7 @@ public class startApp extends CordovaPlugin {
 	/**
 	 * getExtras
 	 */
-	public void getExtras(CallbackContext callback) {
+	private void getExtras(CallbackContext callback) {
 		try {
 			Bundle extras = cordova.getActivity().getIntent().getExtras(); 
 			JSONObject info = new JSONObject();
@@ -324,7 +356,7 @@ public class startApp extends CordovaPlugin {
 	/**
 	 * getExtra
 	 */
-	public void getExtra(JSONArray args, CallbackContext callback) {
+	private void getExtra(JSONArray args, CallbackContext callback) {
 		try {
 			String extraName = parseExtraName(args.getString(0));
 			Intent extraIntent = cordova.getActivity().getIntent();
@@ -333,7 +365,7 @@ public class startApp extends CordovaPlugin {
 				String extraValue = extraIntent.getStringExtra(extraName);
 				
 				if (extraValue == null) {
-					extraValue = ((Uri) extraIntent.getParcelableExtra(extraName)).toString();
+					extraValue = (extraIntent.getParcelableExtra(extraName)).toString();
 				}
 
 				callback.success(extraValue);
@@ -347,45 +379,30 @@ public class startApp extends CordovaPlugin {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * functions
-	 */
-	private String parseExtraName(String extraName) {
-		String parseIntentExtra = extraName;
-		
-		try {
-			parseIntentExtra = getIntentValueString(extraName);
-		}
-		catch(NoSuchFieldException e) {
-			parseIntentExtra = extraName;	
-		}
-		catch(IllegalAccessException e) {
-			e.printStackTrace();
-			return extraName;
-		}
-		
-		Log.e(TAG, parseIntentExtra);
-		
-		return parseIntentExtra;
-	}
-	
-	private String getIntentValueString(String flag) throws NoSuchFieldException, IllegalAccessException {
-		
-		if(NO_PARSE_INTENT_VALS) {
-			return flag;
-		}
-		
-		Field field = Intent.class.getDeclaredField(flag);
-		field.setAccessible(true);
 
-		return (String) field.get(null);
-	}
-	
-	private int getIntentValue(String flag) throws NoSuchFieldException, IllegalAccessException {
-		Field field = Intent.class.getDeclaredField(flag);
-		field.setAccessible(true);
-		
-		return field.getInt(null);
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if(callbackContext != null) {
+			JSONObject result = new JSONObject();
+
+			try {
+				result.put("_ACTION_requestCode_", requestCode);
+				result.put("_ACTION_resultCode_", resultCode);
+
+				Bundle bundle = intent.getExtras();
+				if (bundle != null) {
+					for (String key : bundle.keySet()) {
+						result.put(key, bundle.get(key));
+					}
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+			pluginResult.setKeepCallback(true);
+
+			callbackContext.sendPluginResult(pluginResult);
+		}
 	}
 }

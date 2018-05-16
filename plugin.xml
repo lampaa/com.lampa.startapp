@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 	id="com.lampa.startapp"
-	version="0.1.4">
+	version="6.1.0">
 
     <name>startApp</name>
     <description>Phonegap plugin for check or launch other application in android device.</description>
@@ -19,11 +19,6 @@
             <feature name="startApp">
                 <param name="android-package" value="com.lampa.startapp.startApp"/>
             </feature>
-        </config-file>
-        <config-file target="AndroidManifest.xml" parent="/*/application">
-            <provider android:authorities="com.lampa.startapp.fileProvider" android:exported="false" android:grantUriPermissions="true" android:name="android.support.v4.content.FileProvider">
-                <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
-            </provider>
         </config-file>
 
         <source-file src="src/android/startApp.java" target-dir="src/com/lampa/startapp" />
