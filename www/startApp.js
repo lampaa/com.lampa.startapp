@@ -1,6 +1,6 @@
 cordova.define("com.lampa.startapp.startapp", function(require, exports, module) {
 /**
-	com.lampa.startapp, ver. 6.1.0
+	com.lampa.startapp, ver. 6.1.1
 	https://github.com/lampaa/com.lampa.startapp
 	
 	Phonegap plugin for check or launch other application in android device (iOS support).
