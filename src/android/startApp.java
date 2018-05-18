@@ -27,7 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 public class startApp extends Assets {
-	private HashMap<Integer, BroadcastReceiver> broadcastReceiverHashMap = new HashMap<>();
+	private HashMap<Integer, BroadcastReceiver> broadcastReceiverHashMap = new HashMap<Integer, BroadcastReceiver>();
 	private CallbackContext callbackContext;
     /**
      * Executes the request and returns PluginResult.
