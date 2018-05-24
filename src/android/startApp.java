@@ -1,5 +1,5 @@
 /**
-	com.lampa.startapp, ver. 6.1.1
+	com.lampa.startapp, ver. 6.1.3
 	https://github.com/lampaa/com.lampa.startapp
 	
 	Phonegap plugin for check or launch other application in android device (iOS support).
@@ -27,7 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 public class startApp extends Assets {
-	private HashMap<Integer, BroadcastReceiver> broadcastReceiverHashMap = new HashMap<Integer, BroadcastReceiver>();
+	private HashMap<Integer, BroadcastReceiver> broadcastReceiverHashMap = new HashMap<>();
 	private CallbackContext callbackContext;
     /**
      * Executes the request and returns PluginResult.
@@ -68,7 +68,7 @@ public class startApp extends Assets {
 	 * @param args
 	 * @param callback
 	 */
-	private void receiver(JSONArray args, CallbackContext callback) {
+	private void receiver(JSONArray args, final CallbackContext callback) {
 		BroadcastReceiver receiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -102,6 +102,8 @@ public class startApp extends Assets {
 				filter.addAction(values.getString(i));
 			}
 
+
+			//cordova.getActivity().getApplicationContext()
 			cordova.getContext().registerReceiver(receiver, filter);
 			broadcastReceiverHashMap.put(receiver.hashCode(), receiver);
 
@@ -305,7 +307,7 @@ public class startApp extends Assets {
 					PackageManager pm = cordova.getActivity().getApplicationContext().getPackageManager();
 					
 					// get package info
-					PackageInfo PackInfo = pm.getPackageInfo(params.getString("package"), PackageManager.GET_ACTIVITIES);
+					final PackageInfo PackInfo = pm.getPackageInfo(params.getString("package"), PackageManager.GET_ACTIVITIES);
 						
 					// create json object
 					JSONObject info = new JSONObject() {{
