@@ -4,7 +4,7 @@
 Phonegap plugin for check or launch other application, get extras in phonegap app.
 
 
-Last version 6.1.3
+Last version 6.1.5
 *  Add support java 1.7
 *  Add full support activityForResult, sendBroadcast and RegisterReceiver.
 *  Add types of extras.
