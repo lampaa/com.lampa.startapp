@@ -1,3 +1,11 @@
+/**
+	com.lampa.startapp, ver. 6.1.6
+	https://github.com/lampaa/com.lampa.startapp
+	
+	Phonegap plugin for check or launch other application in android device (iOS support).
+	bug tracker: https://github.com/lampaa/com.lampa.startapp/issues
+*/
+
 package com.lampa.startapp;
 
 import android.content.Intent;
@@ -7,9 +15,7 @@ import org.apache.cordova.CordovaPlugin;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by User on 16.05.2018.
- */
+
 public class Assets extends CordovaPlugin {
     protected static final String TAG = "startApp";
     protected boolean NO_PARSE_INTENT_VALS = false;

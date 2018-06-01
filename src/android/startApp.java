@@ -1,5 +1,5 @@
 /**
-	com.lampa.startapp, ver. 6.1.3
+	com.lampa.startapp, ver. 6.1.6
 	https://github.com/lampaa/com.lampa.startapp
 	
 	Phonegap plugin for check or launch other application in android device (iOS support).
@@ -38,25 +38,23 @@ public class startApp extends Assets {
      * @return                  Always return true.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		switch (action) {
-			case "start":
-				this.start(args, callbackContext);
-				break;
-			case "check":
-				this.check(args, callbackContext);
-				break;
-			case "receiver":
-				this.receiver(args, callbackContext);
-				break;
-			case "unReceiver":
-				this.receiver(args, callbackContext);
-				break;
-			case "getExtras":
-				this.getExtras(callbackContext);
-				break;
-			case "getExtra":
-				this.getExtra(args, callbackContext);
-				break;
+		if(action.equals("start")) {
+			this.start(args, callbackContext);
+		}
+		else if(action.equals("check")) {
+			this.check(args, callbackContext);
+		}
+		else if(action.equals("receiver")) {
+			this.receiver(args, callbackContext);
+		}
+		else if(action.equals("unReceiver")) {
+			this.receiver(args, callbackContext);
+		}
+		else if(action.equals("getExtras")) {
+			this.getExtras(callbackContext);
+		}
+		else if(action.equals("getExtra")) {
+			this.getExtra(args, callbackContext);
 		}
 
         return true;
@@ -104,7 +102,7 @@ public class startApp extends Assets {
 
 
 			//cordova.getActivity().getApplicationContext()
-			cordova.getContext().registerReceiver(receiver, filter);
+			cordova.getActivity().getApplicationContext().registerReceiver(receiver, filter);
 			broadcastReceiverHashMap.put(receiver.hashCode(), receiver);
 
 			PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, receiver.hashCode());
