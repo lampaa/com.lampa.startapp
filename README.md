@@ -18,7 +18,7 @@ Last version 6.1.6
 > 
 > Delete:  ```cordova plugin rm com.lampa.startapp```
 > 
-> Delete previos version:  ```cordova plugin rm org.apache.cordova.startapp```
+> Delete previous version:  ```cordova plugin rm org.apache.cordova.startapp```
 
 [Manually installation for Android.](/MANUALLY_INSTALL.md)
 
