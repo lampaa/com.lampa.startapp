@@ -214,7 +214,7 @@ _Send broadcast_
 var sApp = startApp.set({ /* params */
 	"action":"RECEIVER_NAME",
 	"intentstart":"sendBroadcast",
-	"noParseAction": true // disable parse action value
+	"noParse": true // disable parse action value
 }, {
 	"extraKey1":"extraValue1",
 	"extraKey2":"extraValue2"
@@ -319,7 +319,7 @@ Example, add alarm to alarm manager:
 ```js
 var sApp = startApp.set({ /* params */
     "action":"android.intent.action.SET_ALARM",
-    "noParseAction": true
+    "noParse": true
 }, {
     "android.intent.extra.alarm.MESSAGE":"New Alarm",
     "android.intent.extra.alarm.HOUR":17,
