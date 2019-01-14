@@ -329,7 +329,7 @@ var sApp = startApp.set({ /* params */
 sApp.start(function(success) {
     console.log(success);
 }, function(error) {
-    console.error(success);
+    console.error(error);
 });
 ```
 
