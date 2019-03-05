@@ -160,11 +160,12 @@ public class startApp extends Assets {
 				 * set intent
 				 * http://developer.android.com/reference/android/content/Intent.html (java.lang.String)
 				 */
-				else if(params.has("intent")) {
-					LaunchIntent = new Intent(params.getString("intent"));
-				}
 				else {
 					LaunchIntent = new Intent();
+					if(params.has("intent")) {
+						ComponentName ci = new ComponentName(cordova.getActivity().getPackageName(), params.getString("intent"));
+						it.setComponent(ci);
+					}
 				}
         		
 
