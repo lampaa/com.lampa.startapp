@@ -1,7 +1,7 @@
 /**
 	com.lampa.startapp, ver. 6.1.6
 	https://github.com/lampaa/com.lampa.startapp
-	
+
 	Phonegap plugin for check or launch other application in android device (iOS support).
 	bug tracker: https://github.com/lampaa/com.lampa.startapp/issues
 */
@@ -125,23 +125,23 @@ public class startApp extends Assets {
 		JSONObject params;
 		JSONArray flags;
 		JSONArray component;
-		
+
 		JSONObject extra;
 		String key;
-		
+
 		int i;
-		
+
 		try {
 			if (args.get(0) instanceof JSONObject) {
 				params = args.getJSONObject(0);
-			
+
 				/**
 				 * disable parsing intent values
 				 */
 				if(params.has("noParse")) {
 					NO_PARSE_INTENT_VALS = true;
 				}
-				
+
 				/**
 				 * set application
 				 * http://developer.android.com/reference/android/content/Intent.html(java.lang.String)
@@ -149,7 +149,7 @@ public class startApp extends Assets {
 				if(params.has("application")) {
 					PackageManager manager = cordova.getActivity().getApplicationContext().getPackageManager();
 					LaunchIntent = manager.getLaunchIntentForPackage(params.getString("application"));
-						
+
 					if (LaunchIntent == null) {
 						callback.error("Application \""+ params.getString("application") +"\" not found!");
 						return;
@@ -167,7 +167,7 @@ public class startApp extends Assets {
 						LaunchIntent.setComponent(ci);
 					}
 				}
-        		
+
 
 				/**
 				 * set package
@@ -176,33 +176,33 @@ public class startApp extends Assets {
 				if(params.has("package")) {
 					LaunchIntent.setPackage(params.getString("package"));
 				}
-				
+
 				/**
 				 * set action
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setAction%28java.lang.String%29
 				 */
 				if(params.has("action")) {
-					LaunchIntent.setAction(getIntentValueString(params.getString("action")));	
+					LaunchIntent.setAction(getIntentValueString(params.getString("action")));
 				}
-				
+
 				/**
 				 * set category
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#addCategory%28java.lang.String%29
 				 */
 				if(params.has("category")) {
-					LaunchIntent.addCategory(getIntentValueString(params.getString("category")));	
+					LaunchIntent.addCategory(getIntentValueString(params.getString("category")));
 				}
-				
+
 				/**
 				 * set type
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setType%28java.lang.String%29
 				 */
 				if(params.has("type")) {
-					LaunchIntent.setType(params.getString("type"));	
+					LaunchIntent.setType(params.getString("type"));
 				}
-				
 
-				
+
+
 				/**
 				 * set data (uri)
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setData%28android.net.Uri%29
@@ -210,38 +210,38 @@ public class startApp extends Assets {
 				if(params.has("uri")) {
 					LaunchIntent.setData(Uri.parse(params.getString("uri")));
 				}
-				
+
 				/**
 				 * set flags
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#addFlags%28int%29
 				 */
 				if(params.has("flags")) {
 					flags = params.getJSONArray("flags");
-					
+
 					for(i=0; i < flags.length(); i++) {
-						LaunchIntent.addFlags(getIntentValue(flags.getString(i))); 	
+						LaunchIntent.addFlags(getIntentValue(flags.getString(i)));
 					}
 				}
-				
+
 				/**
 				 * set component
 				 * http://developer.android.com/intl/ru/reference/android/content/Intent.html#setComponent%28android.content.ComponentName%29
 				 */
 				if(params.has("component")) {
 					component = params.getJSONArray("component");
-					
+
 					if(component.length() == 2) {
-						LaunchIntent.setComponent(new ComponentName(component.getString(0), component.getString(1)));	
+						LaunchIntent.setComponent(new ComponentName(component.getString(0), component.getString(1)));
 					}
 				}
-				
+
 				/**
 				 * set extra fields
 				 */
 				if(!args.isNull(1)) {
 					extra = args.getJSONObject(1);
 					Iterator<String> iter = extra.keys();
-							
+
 					while (iter.hasNext()) {
 						key = iter.next();
 						Object value = extra.get(key);
@@ -272,18 +272,18 @@ public class startApp extends Assets {
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
 				if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
-					cordova.getActivity().sendBroadcast(LaunchIntent);	
+					cordova.getActivity().sendBroadcast(LaunchIntent);
 				}
 				else {
-					cordova.getActivity().startActivity(LaunchIntent);	
+					cordova.getActivity().startActivity(LaunchIntent);
 				}
-				
+
 				callback.sendPluginResult(pluginResult);
 			}
 			else {
 				callback.error("Incorrect params, array is not array object!");
 			}
-		} 
+		}
 		catch (Exception e) {
 			e.printStackTrace();
 			callback.error(e.getClass() + ": " + e.getMessage());
@@ -292,21 +292,21 @@ public class startApp extends Assets {
 
     /**
      * checkApp
-     */	 
+     */
 	private void check(JSONArray args, CallbackContext callback) {
 		JSONObject params;
-		
+
 		try {
 			if (args.get(0) instanceof JSONObject) {
 				params = args.getJSONObject(0);
-		
-		
+
+
 				if(params.has("package")) {
 					PackageManager pm = cordova.getActivity().getApplicationContext().getPackageManager();
-					
+
 					// get package info
 					final PackageInfo PackInfo = pm.getPackageInfo(params.getString("package"), PackageManager.GET_ACTIVITIES);
-						
+
 					// create json object
 					JSONObject info = new JSONObject() {{
 						put("versionName", PackInfo.versionName);
@@ -314,7 +314,7 @@ public class startApp extends Assets {
 						put("versionCode", PackInfo.versionCode);
 						put("applicationInfo", PackInfo.applicationInfo);
 					}};
-						
+
 					callback.success(info);
 				}
 				else {
@@ -330,13 +330,13 @@ public class startApp extends Assets {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * getExtras
 	 */
 	private void getExtras(CallbackContext callback) {
 		try {
-			Bundle extras = cordova.getActivity().getIntent().getExtras(); 
+			Bundle extras = cordova.getActivity().getIntent().getExtras();
 			JSONObject info = new JSONObject();
 
 			if (extras != null) {
@@ -344,7 +344,7 @@ public class startApp extends Assets {
 					info.put(key, extras.get(key).toString());
 				}
 			}
-			
+
 			callback.success(info);
 		}
 		catch(JSONException e) {
@@ -352,7 +352,7 @@ public class startApp extends Assets {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * getExtra
 	 */
@@ -363,7 +363,7 @@ public class startApp extends Assets {
 
 			if(extraIntent.hasExtra(extraName)) {
 				String extraValue = extraIntent.getStringExtra(extraName);
-				
+
 				if (extraValue == null) {
 					extraValue = (extraIntent.getParcelableExtra(extraName)).toString();
 				}
@@ -371,7 +371,7 @@ public class startApp extends Assets {
 				callback.success(extraValue);
 			}
 			else {
-				callback.error("extra field not found");	
+				callback.error("extra field not found");
 			}
 		}
 		catch(JSONException e) {
@@ -389,7 +389,10 @@ public class startApp extends Assets {
 				result.put("_ACTION_requestCode_", requestCode);
 				result.put("_ACTION_resultCode_", resultCode);
 
-				Bundle bundle = intent.getExtras();
+				Bundle bundle = intent == null
+					? null
+					: intent.getExtras();
+
 				if (bundle != null) {
 					for (String key : bundle.keySet()) {
 						result.put(key, bundle.get(key));
