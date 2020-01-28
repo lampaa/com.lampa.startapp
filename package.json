@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lampaa/com.lampa.startapp.git"
+    "url": "git+https://github.com/wyobi/com.lampa.startapp.git"
   },
   "keywords": [
     "cordova",
@@ -27,7 +27,7 @@
   "author": "lampaa",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lampaa/com.lampa.startapp/issues"
+    "url": "https://github.com/wyobi/com.lampa.startapp/issues"
   },
-  "homepage": "https://github.com/lampaa/com.lampa.startapp#readme"
+  "homepage": "https://github.com/wyobi/com.lampa.startapp#readme"
 }
