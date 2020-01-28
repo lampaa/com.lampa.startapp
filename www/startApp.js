@@ -1,5 +1,5 @@
 /**
-	com.lampa.startapp
+	com.lampa.startapp, ver. 6.1.4
 	https://github.com/lampaa/com.lampa.startapp
 	
 	Phonegap plugin for check or launch other application in android device (iOS support).
@@ -29,11 +29,25 @@ module.exports = {
 		}
 		
 		return {
-			start: function(completeCallback, errorCallback) {
+			start: function(completeCallback, errorCallback, messageCallback) {
 				completeCallback = completeCallback || function() {};
 				errorCallback = errorCallback || function() {};
+				messageCallback = messageCallback || function() {};
 				
-				exec(completeCallback, errorCallback, "startApp", "start", output);
+				exec(function(result) {
+				    if(result === "OK") {
+				        completeCallback(result);
+				    }
+				    else {
+				        var requestCode = result["_ACTION_requestCode_"];
+				        delete result["_ACTION_requestCode_"];
+
+				        var resultCode = result["_ACTION_resultCode_"];
+				        delete result["_ACTION_resultCode_"];
+
+				        messageCallback(result, requestCode, resultCode);
+				    }
+				}, errorCallback, "startApp", "start", output);
 			},
 			check: function(completeCallback, errorCallback) {
 				completeCallback = completeCallback || function() {};
@@ -41,11 +55,22 @@ module.exports = {
 				
 				exec(completeCallback, errorCallback, "startApp", "check", output);
 			},
-			go: function(completeCallback, errorCallback) {
+			receiver: function(completeCallback, errorCallback, messageCallback) {
 				completeCallback = completeCallback || function() {};
 				errorCallback = errorCallback || function() {};
-				
-				exec(completeCallback, errorCallback, "startApp", "go", output);
+				messageCallback = messageCallback || function() {};
+
+				exec(function(result) {
+				    if(/\d+/.test(result)) {
+				        completeCallback(result);
+				    }
+				    else {
+				        var action = result["_ACTION_VALUE_FORMAT_"];
+				        delete result["_ACTION_VALUE_FORMAT_"];
+
+				        messageCallback(action, result);
+				    }
+				}, errorCallback, "startApp", "receiver", output);
 			}
 		}
 	},
