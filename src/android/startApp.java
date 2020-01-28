@@ -6,7 +6,7 @@
 	bug tracker: https://github.com/lampaa/com.lampa.startapp/issues
 */
 package com.lampa.startapp;
-
+import org.apache.cordova.PluginResult;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
