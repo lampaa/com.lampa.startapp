@@ -181,7 +181,9 @@ public class startApp extends Assets {
 				else if(params.has("intent")) {
 					LaunchIntent = new Intent(params.getString("intent"));
 				}
-        		
+				else {
+					LaunchIntent = new Intent();
+				}
 
 				/**
 				 * set package
