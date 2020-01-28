@@ -51,8 +51,8 @@ public class startApp extends Assets {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		/*
 		from fork lampaa/com.lampa.startapp 
-		*/
         this.callbackContext = callbackContext;
+		*/
         
         if (action.equals("start")) {
             this.start(args, callbackContext);
@@ -295,8 +295,9 @@ public class startApp extends Assets {
                    cordova.setActivityResultCallback (this);
 					/*
 					from wyobi frok
-					callbackContext = callback;
 					*/
+					callbackContext = callback;
+
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
                 else
@@ -309,13 +310,13 @@ public class startApp extends Assets {
                     }
 					/*
 					from fork lampaa/com.lampa.startapp 
-					*/
                     callback.success();
+					*/
 
 					/*
 					from wyobi frok
-					callback.sendPluginResult(pluginResult);
 					*/
+					callback.sendPluginResult(pluginResult);
 					
                 }
 			}
@@ -335,6 +336,32 @@ public class startApp extends Assets {
      */	 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		/*
+		from fork lampaa/com.lampa.startapp 
+		if(callbackContext != null) {
+			JSONObject result = new JSONObject();
+
+			try {
+				result.put("_ACTION_requestCode_", requestCode);
+				result.put("_ACTION_resultCode_", resultCode);
+
+				Bundle bundle = intent.getExtras();
+				if (bundle != null) {
+					for (String key : bundle.keySet()) {
+						result.put(key, bundle.get(key));
+					}
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
+			pluginResult.setKeepCallback(true);
+
+			callbackContext.sendPluginResult(pluginResult);
+		}
+		*/
+
         super.onActivityResult(requestCode, resultCode, data);
 
         try {
@@ -355,8 +382,8 @@ public class startApp extends Assets {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
+	}
+	
     /**
      * checkApp
      */	 
@@ -447,31 +474,7 @@ public class startApp extends Assets {
 		}
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if(callbackContext != null) {
-			JSONObject result = new JSONObject();
-
-			try {
-				result.put("_ACTION_requestCode_", requestCode);
-				result.put("_ACTION_resultCode_", resultCode);
-
-				Bundle bundle = intent.getExtras();
-				if (bundle != null) {
-					for (String key : bundle.keySet()) {
-						result.put(key, bundle.get(key));
-					}
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, result);
-			pluginResult.setKeepCallback(true);
-
-			callbackContext.sendPluginResult(pluginResult);
-		}
-	}
+	
 
 	/** JSON and Intent parsing helpers **/
 
