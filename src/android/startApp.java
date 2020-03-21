@@ -389,7 +389,7 @@ public class startApp extends Assets {
 				result.put("_ACTION_requestCode_", requestCode);
 				result.put("_ACTION_resultCode_", resultCode);
 
-				Bundle bundle = intent.getExtras();
+				Bundle bundle = intent == null ? null : intent.getExtras();
 				if (bundle != null) {
 					for (String key : bundle.keySet()) {
 						result.put(key, bundle.get(key));
