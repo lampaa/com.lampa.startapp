@@ -14,6 +14,7 @@ import android.util.Log;
 import org.apache.cordova.CordovaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.regex.Pattern;
 
 
 public class Assets extends CordovaPlugin {
