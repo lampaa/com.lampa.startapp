@@ -250,7 +250,7 @@ public class startApp extends Assets {
 							LaunchIntent.putExtra(parseExtraName(key), extra.getInt(key));
 						}
 
-						if(params.has("matchDoubleInSting") && matchDoubleInSting(extra.getString(key))) {
+						if(params.has("matchDoubleInString") && matchDoubleInString(extra.getString(key))) {
                             LaunchIntent.putExtra(parseExtraName(key), extra.getDouble(key));
                         } else if(value instanceof String) {
 							LaunchIntent.putExtra(parseExtraName(key), extra.getString(key));

@@ -63,7 +63,7 @@ public class Assets extends CordovaPlugin {
         return field.getInt(null);
     }
 
-    protected boolean matchDoubleInSting(String str) {
+    protected boolean matchDoubleInString(String str) {
         return (Pattern.matches("([0-9]*)\\.([0-9]*)", str));
     }
 }

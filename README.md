@@ -35,7 +35,7 @@ var sApp = startApp.set({} params [, {} extras]);
 | Param | Description | Default | Values |
 | --- | --- | --- | --- |
 | noParse | Disable find action and category in Intent package | false | Boolean |
-| matchDoubleInSting | Match Double type in string extras (usefull for coordinates, prices etc.) | false | Boolean |
+| matchDoubleInString | Match Double type in string extras (usefull for coordinates, prices etc.) | false | Boolean |
 | intent | [Intent(String action)](https://developer.android.com/reference/android/content/Intent.html#Intent%28java.lang.String%29) | null | String |
 | application | [Intent (Context packageContext)](https://developer.android.com/reference/android/content/Intent.html#Intent%28android.content.Context,%20java.lang.Class%3C?%3E%29) | null | String |
 | action | [Intent setAction](http://developer.android.com/reference/android/content/Intent.html#setAction(java.lang.String)) | null | String ||
