@@ -273,7 +273,7 @@ public class startApp extends Assets {
 					callbackContext = callback;
 					cordova.getActivity().startActivityForResult(LaunchIntent, 1);
 				}
-				if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
+				else if(params.has("intentstart") && "sendBroadcast".equals(params.getString("intentstart"))) {
 					cordova.getActivity().sendBroadcast(LaunchIntent);	
 				}
 				else {
